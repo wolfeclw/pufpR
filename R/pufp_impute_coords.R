@@ -3,8 +3,6 @@
 # FUNCTIONS TO IMPUTE COORDINATES WITH LAPSES IN GPS
 # ONLY IMPUTE LAT/LON FOR LAPSES WITH BEGINNING AND ENDING COORDINATES
 
-source("batch_pufp.R")
-
 impute_coords_dist <- function(df, distance_threshold = 100, jitter_amount = 0.00001) {
   
   rm_open_lapse <- df %>% 

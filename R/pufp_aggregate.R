@@ -1,7 +1,4 @@
 
-
-### FUNCTION TO CALCULATE TIME WINDOW AVERAGES/MEDIANS FOR UFP AND LAT/LON COORDINATES
-
 aggregate_pufp <- function(df, interval = 5, interval_unit = "second", floor_or_celiling = "floor", 
                            summary_fun = "median") {
   

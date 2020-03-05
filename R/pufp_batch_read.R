@@ -2,8 +2,6 @@
 
 ### batch import PUFP files
 
-source("read_pufp.R")
-
 batch_read_pufp <- function(pufp_files, event_threshold = 10, parse_errors = FALSE, tz = "America/New_York", 
                             truncate_ufp = TRUE, coords = TRUE) {
   
