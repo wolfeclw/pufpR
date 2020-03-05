@@ -7,7 +7,7 @@ ufp_aggregate <- function(df, interval = 5, interval_unit = "second", floor_or_c
 
   if (floor_or_celiling == "floor") {
     d_agg <- df %>%
-      mutate(agg_dt = floor_date(Date_Time, paste(interval, interval_unit))) %>%
+      mutate(agg_dt = lubridate::floor_date(Date_Time, paste(interval, interval_unit))) %>%
       group_by(agg_dt) %>%
       summarise_if(is.numeric, summary_fun, na.rm = TRUE) %>%
       rename(Date_Time = agg_dt) %>%
@@ -19,7 +19,7 @@ ufp_aggregate <- function(df, interval = 5, interval_unit = "second", floor_or_c
       select(Date_Time, Date, Time, everything())
   } else {
     d_agg <- df %>%
-      mutate(agg_dt = ceiling_date(Date_Time, paste(interval, interval_unit))) %>%
+      mutate(agg_dt = lubridate::ceiling_date(Date_Time, paste(interval, interval_unit))) %>%
       group_by(agg_dt) %>%
       summarise_if(is.numeric, summary_fun, na.rm = TRUE) %>%
       rename(Date_Time = agg_dt) %>%

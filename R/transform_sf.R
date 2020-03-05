@@ -4,10 +4,10 @@
 
 ufp_sf <- function(df) {
   df_msg <- if (is.data.frame(df) == FALSE) {
-    stop("The input object is not a data frame.  Did you import data using the `read_pufp()` or `batch_read_pufp()` function?")
+    stop("The input object is not a data frame.  Did you import data using the `ufp_read()` or `ufp_batch_read()` function?")
   }
   coords_msg <- if (sum(stringr::str_detect(names(df), "lon|lat")) < 1) {
-    stop("The input data frame is missing longitude and latitude. Please set 'coords = TRUE' in `read_pufp()` or `batch_read_pufp()`.")
+    stop("The input data frame is missing longitude and latitude. Please set 'coords = TRUE' in `ufp_read()` or `batch_read_pufp()`.")
   }
 
   d_coords <- filter(df, !is.na(lat))

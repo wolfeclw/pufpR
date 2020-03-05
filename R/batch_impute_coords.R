@@ -1,7 +1,5 @@
 
 
-### impute coords for batch data frame (i.e. file with sampling events)
-
 ufp_batch_impute <- function(df, distance_threshold = 100, jitter_amount = 0.00001, speed_threshold = 5,
                              speed_window = 60, fill_open_lapses = TRUE) {
   pute_batch <- function(df, distance_threshold = 100, jitter_amount = 0.00001, speed_threshold = 5,

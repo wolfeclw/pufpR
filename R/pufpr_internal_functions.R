@@ -1,0 +1,342 @@
+
+###### INTERNAL READ FUNCTIONS #####
+
+import_pufp <- function(path) {
+  readr::read_tsv(path,
+                  skip = 1, trim_ws = TRUE, col_names = FALSE,
+                  col_types = readr::cols(
+                    .default = readr::col_character(),
+                    X2 = readr::col_time(),
+                    X3 = readr::col_double()
+                  )
+  )
+}
+
+cols_pufp <- function(path) {
+  d <- suppressWarnings(import_pufp(path))
+  
+  d_names <- c("Date", "Time", "UFP_conc", "GPS_status", "GPS_Signal", "na_col", "Sensor")
+  d <- stats::setNames(d, d_names)
+  
+  if (length(d) > 7) {
+    d <- suppressMessages(as_tibble(d, .name_repair = "unique")) %>%
+      rename(Warning = 8)
+  } else {
+    d <- mutate(d, Warning = NA)
+  }
+  
+  d <- select(d, -na_col)
+  d
+}
+
+clean_pufp <- function(path, tz = "America/New_York", truncate_ufp = TRUE) {
+  d_cols <- cols_pufp(path)
+  d_cols$Date <- lubridate::mdy(d_cols$Date)
+  d_cols$Date_Time <- lubridate::ymd_hms(paste(d_cols$Date, d_cols$Time), tz = tz)
+  d_cols <- arrange(d_cols, Date_Time)
+  
+  if (truncate_ufp == TRUE) {
+    d_cols$UFP_conc250 <- ifelse(d_cols$UFP_conc > 2.5e5, 2.5e5, d_cols$UFP_conc)
+  }
+  
+  d_clean <- d_cols %>%
+    mutate(gps_element_count = stringr::str_count(GPS_Signal, ",")) %>%
+    filter(gps_element_count >= 5) %>%
+    select(Date_Time, Date, Time, starts_with("UFP"), everything()) %>%
+    select(-gps_element_count)
+  
+  d_clean
+}
+
+
+geo_pufp <- function(path, tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE) {
+  clean_df <- clean_pufp(path, tz = tz, truncate_ufp = truncate_ufp)
+  
+  if (coords == FALSE) {
+    geo_df <- clean_df
+  } else {
+    lat_lon_df <- clean_df %>%
+      mutate(
+        GPS_split = stringr::str_split(GPS_Signal, pattern = ","),
+        latitude = map_chr(GPS_split, 3),
+        longitude = map_chr(GPS_split, 5),
+        GPS_Valid = ifelse(nchar(latitude) > 2, 1, 0),
+        deg_lat = as.numeric(substr(latitude, start = 1, stop = 2)),
+        mm_lat = as.numeric(substr(latitude, start = 3, stop = 10)),
+        deg_lon = as.numeric(substr(longitude, start = 1, stop = 3)),
+        mm_lon = as.numeric(substr(longitude, start = 4, stop = 11)),
+        ds_lat = mm_lat / 60,
+        ds_lon = mm_lon / 60,
+        lat = deg_lat + ds_lat,
+        lon = (deg_lon + ds_lon) * -1
+      ) %>%
+      select(GPS_Valid, lat, lon)
+    
+    geo_df <- bind_cols(clean_df, lat_lon_df)
+    
+    empty_GPS <- sum(is.na(geo_df$lat))
+    pct_empty <- round(empty_GPS / nrow(geo_df), digits = 2)
+    
+    message(paste(
+      "A total of", empty_GPS, "rows or", scales::percent(pct_empty),
+      "of the data in PUFP file", deparse(path), "is missing lat/lon coordinates."
+    ))
+  }
+  geo_df
+}
+
+##### INTERNAL IMPUTE FUNCTIONS
+
+
+impute_coords_dist <- function(df, distance_threshold = 100, jitter_amount = 0.00001) {
+  rm_open_lapse <- df %>%
+    mutate(r = row_number()) %>%
+    filter(
+      cumsum(GPS_Valid) != 0,
+      rev(cumsum(rev(GPS_Valid)) != 0)
+    )
+  
+  d_lapse <- rm_open_lapse %>%
+    mutate(lapse = ifelse(is.na(lat), 1, 0)) %>%
+    filter(lapse == 1)
+  
+  if (nrow(d_lapse) > 0) {
+    d_lapse <- d_lapse %>%
+      mutate(
+        lag_rownum = lag(r),
+        r_diff = r - lag_rownum,
+        break_yn = ifelse(r_diff > 1 | is.na(lag_rownum), 1, 0),
+        lapse_grp = cumsum(break_yn)
+      ) %>%
+      select(-c(lag_rownum, r_diff, break_yn, lapse))
+    
+    d_lapse_join <- suppressMessages(full_join(df, d_lapse))
+    
+    d_row_vector <- d_lapse_join %>%
+      group_by(lapse_grp) %>%
+      summarise(
+        min_minus = min(r) - 1,
+        max_plus = max(r) + 1
+      ) %>%
+      tidyr::drop_na()
+    
+    minus_coords <- d_row_vector$min_minus
+    plus_coords <- d_row_vector$max_plus
+    
+    dminus <- map_df(d_lapse_join, `[`, minus_coords)
+    dplus <- map_df(d_lapse_join, `[`, plus_coords)
+    
+    lapse_coords_bind <- bind_cols(dminus, dplus)
+    lapse_coords_bind <- lapse_coords_bind %>%
+      mutate(
+        lapse_grp = row_number(),
+        lapse_distance = round(geosphere::distHaversine(cbind(lon, lat), cbind(lon1, lat1), r = 6378137),
+                               digits = 2
+        )
+      ) %>%
+      select(lapse_grp, lapse_distance)
+    
+    min_dist <- min(lapse_coords_bind$lapse_distance)
+    max_dist <- max(lapse_coords_bind$lapse_distance)
+    d_dist <- suppressMessages(full_join(d_lapse_join, lapse_coords_bind))
+    
+    
+    if (min_dist > distance_threshold) {
+      warning(paste0(
+        "The minimum distance between missing coordinates (", min_dist,
+        ") meters is greater than the distance threshold. Lapses in GPS were not imputed."
+      ),
+      call. = FALSE
+      )
+      
+      d_dist_imputed <- d_dist %>%
+        select(-c(lapse_grp, r)) %>%
+        mutate(imputed_coord = ifelse(!is.na(lat), 0, NA))
+    } else {
+      d_coords_fill <- d_dist %>%
+        mutate(
+          impute_lat = ifelse(is.na(lat) & lapse_distance < distance_threshold,
+                              zoo::na.locf(lat, na.rm = FALSE), lat
+          ),
+          impute_lon = ifelse(is.na(lon) & lapse_distance < distance_threshold,
+                              zoo::na.locf(lon, na.rm = FALSE), lon
+          )
+        ) %>%
+        filter(!is.na(lapse_grp) & !is.na(impute_lat)) %>%
+        sf::st_as_sf(coords = c("impute_lon", "impute_lat"), crs = 4326)
+      
+      d_jitter <- sf::st_jitter(d_coords_fill, amount = jitter_amount)
+      d_jitter <- d_jitter %>%
+        mutate(
+          jlat = sf::st_coordinates(.)[, 2],
+          jlon = sf::st_coordinates(.)[, 1]
+        ) %>%
+        sf::st_drop_geometry()
+      
+      jitter_join <- suppressMessages(full_join(d_dist, d_jitter))
+      
+      d_dist_imputed <- jitter_join %>%
+        mutate(
+          imputed_coord = ifelse(!is.na(jlat), 1,
+                                 ifelse(is.na(jlat) & is.na(lat), NA, 0)
+          ),
+          lat = ifelse(is.na(jlat), lat, jlat),
+          lon = ifelse(is.na(jlon), lon, jlon)
+        ) %>%
+        select(-c(r, jlat, jlon, lapse_grp))
+    }
+    
+    message(paste0(
+      "The minimum and maximum distance between lapses is ", min_dist, " and ",
+      max_dist, " meters, respectively."
+    ))
+  } else {
+    d_dist_imputed <- df %>%
+      mutate(imputed_coord = ifelse(!is.na(lat), 0, NA))
+    message("Coordinates were not imputed based on distance.  There are no lapses enclosed with GPS coordinates.")
+  }
+  
+  d_dist_imputed
+}
+
+###
+
+impute_coords_open <- function(df, distance_threshold = 100, jitter_amount = 0.00001, speed_threshold = 5,
+                               speed_window = 60, open_lapse_length = 600) {
+  d_dist_imputed <- impute_coords_dist(df,
+                                       distance_threshold = distance_threshold,
+                                       jitter_amount = jitter_amount
+  ) %>%
+    mutate(r = row_number())
+  
+  open_lapse_head <- d_dist_imputed %>%
+    filter(cumsum(GPS_Valid) == 0)
+  
+  open_lapse_tail <- d_dist_imputed %>%
+    filter(rev(cumsum(rev(GPS_Valid)) == 0))
+  
+  speed_f <- function(df) {
+    d_speed <- df %>%
+      filter(!duplicated(Date_Time)) %>%
+      mutate(
+        lag_time.diff = lubridate::ymd_hms(Date_Time) - lag(lubridate::ymd_hms(Date_Time)),
+        distance = geosphere::distHaversine(cbind(lon, lat), cbind(lag(lon), lag(lat)), r = 6378137),
+        speed_ms = round(distance / as.numeric(lag_time.diff), digits = 2)
+      ) %>%
+      select(distance, speed_ms)
+    
+    d_speed$speed_ms
+  }
+  
+  if (nrow(open_lapse_head) > 1 & nrow(open_lapse_head) < open_lapse_length) {
+    lower_row_h <- max(open_lapse_head$r) + 1
+    upper_row_h <- max(open_lapse_head$r) + speed_window
+    head_impute_set <- d_dist_imputed[lower_row_h:upper_row_h, ]
+    h_speed <- speed_f(head_impute_set)
+    h_speed <- median(h_speed, na.rm = TRUE)
+  } else {
+    h_speed <- Inf
+  }
+  
+  if (nrow(open_lapse_tail) > 1 & nrow(open_lapse_head) < open_lapse_length) {
+    lower_row_t <- min(open_lapse_tail$r) - speed_window
+    upper_row_t <- min(open_lapse_tail$r)
+    tail_impute_set <- d_dist_imputed[lower_row_t:upper_row_t, ]
+    t_speed <- speed_f(tail_impute_set)
+    t_speed <- median(t_speed, na.rm = TRUE)
+  } else {
+    t_speed <- Inf
+  }
+  
+  if (h_speed < speed_threshold) {
+    first_coords_r <- d_dist_imputed[(max(open_lapse_head$r) + 1), ]
+    h_impute <- bind_rows(open_lapse_head, first_coords_r)
+    h_impute <- h_impute %>%
+      mutate(
+        h_speed = h_speed,
+        impute_lat = zoo::na.locf(lat, fromLast = TRUE),
+        impute_lon = zoo::na.locf(lon, fromLast = TRUE)
+      ) %>%
+      sf::st_as_sf(coords = c("impute_lon", "impute_lat"), crs = 4326)
+    
+    h_jitter <- sf::st_jitter(h_impute, amount = jitter_amount)
+    h_jitter <- h_jitter %>%
+      mutate(
+        jlat = sf::st_coordinates(.)[, 2],
+        jlon = sf::st_coordinates(.)[, 1]
+      ) %>%
+      sf::st_drop_geometry()
+    h_jitter <- h_jitter[-nrow(h_jitter), ]
+  } else {
+    h_jitter <- d_dist_imputed[0, ]
+  }
+  
+  if (t_speed < speed_threshold) {
+    last_coords_r <- d_dist_imputed[(min(open_lapse_tail$r) - 1), ]
+    t_impute <- bind_rows(last_coords_r, open_lapse_tail)
+    t_impute <- t_impute %>%
+      mutate(
+        t_speed = t_speed,
+        impute_lat = zoo::na.locf(lat),
+        impute_lon = zoo::na.locf(lon)
+      ) %>%
+      sf::st_as_sf(coords = c("impute_lon", "impute_lat"), crs = 4326)
+    
+    t_jitter <- sf::st_jitter(t_impute, amount = jitter_amount)
+    t_jitter <- t_jitter %>%
+      mutate(
+        jlat = sf::st_coordinates(.)[, 2],
+        jlon = sf::st_coordinates(.)[, 1]
+      ) %>%
+      sf::st_drop_geometry()
+    t_jitter <- t_jitter[-1, ]
+  } else {
+    t_jitter <- d_dist_imputed[0, ]
+  }
+  
+  if (nrow(h_jitter) > 1 | nrow(t_jitter) > 1) {
+    ht_jitter_bind <- bind_rows(h_jitter, t_jitter)
+    ht_jitter_join <- suppressMessages(full_join(d_dist_imputed, ht_jitter_bind))
+    
+    d_imputed_open <- ht_jitter_join %>%
+      mutate(
+        imputed_coord = ifelse(is.na(imputed_coord) & !is.na(jlat), 1, imputed_coord),
+        lat = ifelse(is.na(jlat), lat, jlat),
+        lon = ifelse(is.na(jlon), lon, jlon)
+      ) %>%
+      select(-c(r:length(.)))
+  } else {
+    d_imputed_open <- d_dist_imputed %>%
+      select(-c(r:length(.)))
+  }
+  
+  if (speed_threshold < h_speed & !is.infinite(h_speed)) {
+    message(paste0(
+      "The speed threshold is less than calcualted speed at the head of the file (", h_speed,
+      " m/s) -- the open lapse was not imputed."
+    ))
+  }
+  
+  if (speed_threshold < t_speed & !is.infinite(t_speed)) {
+    message(paste0(
+      "The speed threshold is less than calcualted speed at the tail of the file (", t_speed,
+      " m/s) -- the open lapse was not imputed."
+    ))
+  }
+  
+  if (nrow(open_lapse_head) > open_lapse_length) {
+    message("The lapse at the end of the file exceeded the length threshold. Coordinates were not imputed.")
+  }
+  
+  if (nrow(open_lapse_tail) > open_lapse_length) {
+    message("The lapse at the end of the file exceeded the length threshold. Coordinates were not imputed.")
+  }
+  
+  d_imputed_open
+}
+
+
+#######
+
+
+
