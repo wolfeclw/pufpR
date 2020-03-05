@@ -2,7 +2,7 @@
 
 ### create sf object from formatted pufp file
 
-sf_pufp <- function(df) {
+ufp_sf <- function(df) {
   
   df_msg <- if (is.data.frame(df) == FALSE) {
     stop("The input object is not a data frame.  Did you import data using the `read_pufp()` or `batch_read_pufp()` function?")

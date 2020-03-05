@@ -1,23 +1,23 @@
 
-pute_batch <- function(df, distance_threshold = 100, jitter_amount = 0.00001, speed_threshold = 5, 
-                       speed_window = 60, fill_open_lapses = TRUE) {
-  
-  d_imputed <- if (sum(df$GPS_Valid) == nrow(df)) {
-    df
-  } else if (fill_open_lapses == TRUE) {
-    suppressMessages(impute_coords_open(df, distance_threshold = distance_threshold, jitter_amount = jitter_amount,
-                                        speed_threshold = speed_threshold, speed_window = speed_window))
-  } else {
-    suppressMessages(impute_coords_dist(df, distance_threshold = distance_threshold, jitter_amount = jitter_amount))
-  }
-  
-}
 
+### impute coords for batch data frame (i.e. file with sampling events)
 
-### impute coords for batch data frame
-
-batch_impute_coords <- function(df, distance_threshold = 100, jitter_amount = 0.00001, speed_threshold = 5, 
+ufp_batch_impute <- function(df, distance_threshold = 100, jitter_amount = 0.00001, speed_threshold = 5, 
                                 speed_window = 60, fill_open_lapses = TRUE) {
+  
+  pute_batch <- function(df, distance_threshold = 100, jitter_amount = 0.00001, speed_threshold = 5, 
+                         speed_window = 60, fill_open_lapses = TRUE) {
+    
+    d_imputed <- if (sum(df$GPS_Valid) == nrow(df)) {
+      df
+    } else if (fill_open_lapses == TRUE) {
+      suppressMessages(impute_coords_open(df, distance_threshold = distance_threshold, jitter_amount = jitter_amount,
+                                          speed_threshold = speed_threshold, speed_window = speed_window))
+    } else {
+      suppressMessages(impute_coords_dist(df, distance_threshold = distance_threshold, jitter_amount = jitter_amount))
+    }
+    
+  }
   
   impute_split <- df %>% split(., .$Sampling_Event)
   

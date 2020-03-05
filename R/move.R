@@ -2,7 +2,7 @@
 
 ### FUNCTION TO CALCULATE SPEED AND AZIMUTH OF CONSECUTIVE PUFP MEASUREMENTS
 
-move_pufp <- function(df) {
+ufp_move <- function(df) {
   
   if (sum(stringr::str_detect(names(df), "lat")) == 0) {
     stop("No 'lat' or 'lon' colunms found.  Did you set 'coords = TRUE' when reading PUFP file?")

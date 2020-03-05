@@ -1,5 +1,5 @@
 
-aggregate_pufp <- function(df, interval = 5, interval_unit = "second", floor_or_celiling = "floor", 
+ufp_aggregate <- function(df, interval = 5, interval_unit = "second", floor_or_celiling = "floor", 
                            summary_fun = "median") {
   
   if (sum(stringr::str_detect(names(df), "Date_Time")) == 0) {

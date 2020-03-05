@@ -89,7 +89,7 @@ geo_pufp <- function(df, parse_errors = FALSE, tz = "America/New_York", truncate
   
                                       ### read PUFP file ###
 
-read_pufp <- function(df, parse_errors = FALSE, tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE) {
+ufp_read <- function(df, parse_errors = FALSE, tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE) {
   pufp_df <- geo_pufp(df, parse_errors = parse_errors, tz = tz, truncate_ufp = truncate_ufp, coords = coords)
   
   pufp_df

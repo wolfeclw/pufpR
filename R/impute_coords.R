@@ -219,7 +219,7 @@ impute_coords_open <- function(df, distance_threshold = 100, jitter_amount = 0.0
 
 ###
 
-impute_coords <- function(df, distance_threshold = 100, jitter_amount = 0.00001, speed_threshold = 5, 
+ufp_impute <- function(df, distance_threshold = 100, jitter_amount = 0.00001, speed_threshold = 5, 
                           speed_window = 60, open_lapse_length = 600, fill_open_lapses = TRUE) {
   
   if (sum(stringr::str_detect(names(df), "Sampling_Event"))) {

@@ -2,7 +2,7 @@
 
 ### batch import PUFP files
 
-batch_read_pufp <- function(pufp_files, event_threshold = 10, parse_errors = FALSE, tz = "America/New_York", 
+ufp_batch_read <- function(pufp_files, event_threshold = 10, parse_errors = FALSE, tz = "America/New_York", 
                             truncate_ufp = TRUE, coords = TRUE) {
   
   d_pufp <- map(pufp_files, ~read_pufp(., parse_errors = parse_errors, tz = tz, 
