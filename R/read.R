@@ -2,8 +2,8 @@
 
 ### import test file
 
-import_pufp <- function(pufp_file) {
-  readr::read_tsv(pufp_file,
+import_pufp <- function(path) {
+  readr::read_tsv(path,
     skip = 1, trim_ws = TRUE, col_names = FALSE,
     col_types = readr::cols(
       .default = readr::col_character(),
@@ -13,31 +13,27 @@ import_pufp <- function(pufp_file) {
   )
 }
 
-cols_pufp <- function(df, parse_errors = FALSE) {
-  if (parse_errors == FALSE) {
-    d <- suppressWarnings(import_pufp(df))
-  } else {
-    d <- import_pufp(df)
-  }
-
+cols_pufp <- function(path) {
+  d <- suppressWarnings(import_pufp(path))
+  
   d_names <- c("Date", "Time", "UFP_conc", "GPS_status", "GPS_Signal", "na_col", "Sensor")
   d <- stats::setNames(d, d_names)
-
+  
   if (length(d) > 7) {
     d <- suppressMessages(as_tibble(d, .name_repair = "unique")) %>%
       rename(Warning = 8)
   } else {
     d <- mutate(d, Warning = NA)
   }
-
+  
   d <- select(d, -na_col)
   d
 }
 
 ### clean imported data frame
 
-clean_pufp <- function(df, parse_errors = FALSE, tz = "America/New_York", truncate_ufp = TRUE) {
-  d_cols <- cols_pufp(df, parse_errors = parse_errors)
+clean_pufp <- function(path, tz = "America/New_York", truncate_ufp = TRUE) {
+  d_cols <- cols_pufp(path)
   d_cols$Date <- lubridate::mdy(d_cols$Date)
   d_cols$Date_Time <- lubridate::ymd_hms(paste(d_cols$Date, d_cols$Time), tz = tz)
   d_cols <- arrange(d_cols, Date_Time)
@@ -57,8 +53,8 @@ clean_pufp <- function(df, parse_errors = FALSE, tz = "America/New_York", trunca
 
 ### parse GPS string to lat and lon coordinates
 
-geo_pufp <- function(df, parse_errors = FALSE, tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE) {
-  clean_df <- clean_pufp(df, parse_errors = parse_errors, tz = tz, truncate_ufp = truncate_ufp)
+geo_pufp <- function(path, tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE) {
+  clean_df <- clean_pufp(path, tz = tz, truncate_ufp = truncate_ufp)
 
   if (coords == FALSE) {
     geo_df <- clean_df
@@ -87,7 +83,7 @@ geo_pufp <- function(df, parse_errors = FALSE, tz = "America/New_York", truncate
 
     message(paste(
       "A total of", empty_GPS, "rows or", scales::percent(pct_empty),
-      "of the data in PUFP file", deparse(df), "is missing lat/lon coordinates."
+      "of the data in PUFP file", deparse(path), "is missing lat/lon coordinates."
     ))
   }
   geo_df
@@ -96,8 +92,22 @@ geo_pufp <- function(df, parse_errors = FALSE, tz = "America/New_York", truncate
 
 ### read PUFP file ###
 
-ufp_read <- function(df, parse_errors = FALSE, tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE) {
-  pufp_df <- geo_pufp(df, parse_errors = parse_errors, tz = tz, truncate_ufp = truncate_ufp, coords = coords)
+#' Read PUFP .txt File
+#'
+#' @param path a path.
+#' @param tz a character string that specifies which time zone to parse the 
+#' date with. Default = "America/New_York."
+#' @param truncate_ufp truncate UFP concentration? If TRUE (the default), UFP
+#' concentrations above 250K will be right censored.
+#' @param coords parse GPS string to derive latitude and longitude? 
+#' Default = TRUE.
+#' @return a tibble.
+#' @export
+#'
+#' @examples
+#' ufp_read(path = "pufp_file.TXT", truncate_ufp = TRUE, coords = TRUE)
+ufp_read <- function(path, tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE) {
+  pufp_df <- geo_pufp(path, tz = tz, truncate_ufp = truncate_ufp, coords = coords)
 
   pufp_df
 }

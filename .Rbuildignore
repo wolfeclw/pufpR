@@ -1,2 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^sample_data$
+^pufpr_trash$
+^README\.md$
+^LICENSE\.md$

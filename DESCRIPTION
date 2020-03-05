@@ -1,11 +1,20 @@
-Package: test
-Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Package: pufpR
+Title: Personal Ultrafine Particle (PUFP) Sensor Data Cleaning and Analysis 
+Version: 0.0.1
+Authors@R: 
+    person(given = "Chris",
+           family = "Wolfe",
+           role = c("aut", "cre"),
+           email = "chris.wolfe@cchmc.org",
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: What the package does (one paragraph).
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+Imports: 
+    dplyr,
+    readr,
+    stringr,
+    lubridate,
+    purrr
+RoxygenNote: 6.1.1
