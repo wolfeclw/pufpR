@@ -26,5 +26,5 @@ a tibble.
 Read PUFP .txt File
 }
 \examples{
-ufp_read(path = "pufp_file.TXT", truncate_ufp = TRUE, coords = TRUE)
+ufp_read(path, truncate_ufp = TRUE, coords = TRUE)
 }

@@ -16,5 +16,12 @@ Imports:
     readr,
     stringr,
     lubridate,
-    purrr
+    purrr,
+    geosphere,
+    hms,
+    scales,
+    sf,
+    zoo
 RoxygenNote: 6.1.1
+Suggests: 
+    testthat

@@ -105,7 +105,7 @@ geo_pufp <- function(path, tz = "America/New_York", truncate_ufp = TRUE, coords 
 #' @export
 #'
 #' @examples
-#' ufp_read(path = "pufp_file.TXT", truncate_ufp = TRUE, coords = TRUE)
+#' ufp_read(path, truncate_ufp = TRUE, coords = TRUE)
 ufp_read <- function(path, tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE) {
   pufp_df <- geo_pufp(path, tz = tz, truncate_ufp = truncate_ufp, coords = coords)
 
