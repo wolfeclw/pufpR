@@ -338,5 +338,3 @@ impute_coords_open <- function(df, distance_threshold = 100, jitter_amount = 0.0
 
 #######
 
-
-
