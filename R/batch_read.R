@@ -2,11 +2,11 @@
 
 ### batch import PUFP files
 
-ufp_batch_read <- function(pufp_files, event_threshold = 10, parse_errors = FALSE, tz = "America/New_York",
+ufp_batch_read <- function(pufp_files, event_threshold = 10, tz = "America/New_York",
                            truncate_ufp = TRUE, coords = TRUE) {
-  d_pufp <- map(pufp_files, ~ read_pufp(.,
-    parse_errors = parse_errors, tz = tz,
-    truncate_ufp = truncate_ufp, coords = coords
+  d_pufp <- map(pufp_files, ~ ufp_read(.,
+                                       tz = tz, truncate_ufp = truncate_ufp, 
+                                       coords = coords
   )) %>%
     reduce(., rbind) %>%
     arrange(Date_Time) %>%

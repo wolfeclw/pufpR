@@ -1,6 +1,8 @@
 
 #' Impute Missing GPS Data
 #'
+#'Imputes missing lon/lat coordinates that occur during GPS lapses.
+#'
 #' @param df an object created by `ufp_read()`.
 #' @param distance_threshold distance (meters) between the last known coordinates before 
 #' a GPS lapse and the first known coordinates after a lapse are compared to 
@@ -8,7 +10,7 @@
 #' imputed. Default = 100.
 #' @param jitter_amount numeric; amount of jitter to apply to imputed coords.
 #' Default = 0.00001 decimal degrees. See \code{\link[sf]{st_jitter}}.
-#' #' @param fill_open_lapses logical; impute missing coordinates at the 
+#' @param fill_open_lapses logical; impute missing coordinates at the 
 #' beginning and end of the data frame (i.e. lapses not enclosed by known 
 #' coordinates). Default = FALSE.
 #' @param speed_threshold criteria to impute open lapses. If the median speed
@@ -20,12 +22,16 @@
 #' threshold, coordinates are not imputed. Default = 600.
 #'
 #' @return a data frame.  An additional column is created to indicate whehter
-#' coordinates were imputed ("imputed_coord").
+#' coordinates were imputed ("imputed_coord"). he function also creates an
+#' additional column stating the distance between lapses ("lapse_distance").
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' 
 #' ufp_impute(df, distance_threshold = 100, jitter_amount = 0.00001, fill_open_lapses = FALSE,
 #' speed_threshold = 5, speed_window = 60, open_lapse_length = 600)
+#' }
 ufp_impute <- function(df, distance_threshold = 100, jitter_amount = 0.00001, fill_open_lapses = FALSE,
                        speed_threshold = 5, speed_window = 60, open_lapse_length = 600) {
   if (sum(stringr::str_detect(names(df), "Sampling_Event"))) {

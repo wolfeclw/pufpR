@@ -23,8 +23,11 @@ Default = TRUE.}
 a tibble.
 }
 \description{
-Read PUFP .txt File
+Reads and cleans text file output from PUFP sensor.
 }
 \examples{
+\dontrun{
+
 ufp_read(path, truncate_ufp = TRUE, coords = TRUE)
+}
 }

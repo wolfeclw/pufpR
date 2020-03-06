@@ -1,6 +1,7 @@
 
-
 #' Read PUFP .txt File
+#'
+#'Reads and cleans text file output from PUFP sensor.
 #'
 #' @param path a path.
 #' @param tz a character string that specifies which time zone to parse the 
@@ -13,9 +14,11 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' 
 #' ufp_read(path, truncate_ufp = TRUE, coords = TRUE)
-#' @importFrom  magrittr %>% 
-#' @importFrom purrr map map_chr map_df map_dbl
+#' }
+#' @importFrom purrr map map_chr map_df map_dbl reduce
 #' @import dplyr
 
 ufp_read <- function(path, tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE) {
