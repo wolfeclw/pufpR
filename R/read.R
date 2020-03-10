@@ -16,7 +16,7 @@
 #' @examples
 #' \dontrun{
 #' 
-#' ufp_read(path, truncate_ufp = TRUE, coords = TRUE)
+#' ufp_read(path, tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE)
 #' }
 #' @importFrom purrr map map_chr map_df map_dbl reduce
 #' @import dplyr

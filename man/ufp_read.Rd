@@ -28,6 +28,6 @@ Reads and cleans text file output from PUFP sensor.
 \examples{
 \dontrun{
 
-ufp_read(path, truncate_ufp = TRUE, coords = TRUE)
+ufp_read(path, tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE)
 }
 }

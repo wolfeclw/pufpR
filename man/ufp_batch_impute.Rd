@@ -29,6 +29,9 @@ coordinates are not imputed.  Default = 5 (m/s).}
 
 \item{speed_window}{numeric; number of rows used to calculate 
 "speed_threshold."}
+
+\item{open_lapse_length}{if the number of rows in an open lapse exceed this 
+threshold, coordinates are not imputed. Default = 600.}
 }
 \value{
 a data frame.  A column is created to indicate whehter

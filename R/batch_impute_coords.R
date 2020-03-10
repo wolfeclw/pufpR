@@ -19,7 +19,8 @@
 #' coordinates are not imputed.  Default = 5 (m/s).
 #' @param speed_window numeric; number of rows used to calculate 
 #' "speed_threshold."
-#'
+#' @param open_lapse_length if the number of rows in an open lapse exceed this 
+#' threshold, coordinates are not imputed. Default = 600.
 #' @return a data frame.  A column is created to indicate whehter
 #' coordinates were imputed ("imputed_coord"). The function also creates an
 #' additional column stating the distance between lapses ("lapse_distance").
@@ -31,9 +32,12 @@
 #' ufp_batch_impute(df, distance_threshold = 100, jitter_amount = 0.00001, fill_open_lapses = FALSE,
 #' speed_threshold = 5, speed_window = 60, open_lapse_length = 600)
 #' }
-
 ufp_batch_impute <- function(df, distance_threshold = 100, jitter_amount = 0.00001, fill_open_lapses = FALSE,
                        speed_threshold = 5, speed_window = 60, open_lapse_length = 600) {
+  
+  if (sum(stringr::str_detect(names(df), "Sampling_Event")) == 0) {
+    stop("Column 'Sampling_Event' not found.")
+  }
   
   impute_split <- df %>% split(., .$Sampling_Event)
   

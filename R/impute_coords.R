@@ -3,7 +3,7 @@
 #'
 #'Imputes missing lon/lat coordinates that occur during GPS lapses.
 #'
-#' @param df an object created by `ufp_read()`.
+#' @param df data frame created by `ufp_read()`.
 #' @param distance_threshold distance (meters) between the last known coordinates before 
 #' a GPS lapse and the first known coordinates after a lapse are compared to 
 #' this value.  If the distance exceeds this threshold, coordinates are not

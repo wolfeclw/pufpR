@@ -9,7 +9,7 @@ ufp_impute(df, distance_threshold = 100, jitter_amount = 1e-05,
   open_lapse_length = 600)
 }
 \arguments{
-\item{df}{an object created by `ufp_read()`.}
+\item{df}{data frame created by `ufp_read()`.}
 
 \item{distance_threshold}{distance (meters) between the last known coordinates before 
 a GPS lapse and the first known coordinates after a lapse are compared to 

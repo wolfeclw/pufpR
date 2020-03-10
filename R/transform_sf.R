@@ -1,7 +1,19 @@
 
-
-### create sf object from formatted pufp file
-
+#' Create `sf` Object
+#' 
+#' Creates a multipoint sf object from a PUFP data frame created by `ufp_read()`
+#' or `ufp_batch_read()`. Points are projected using WGS84 (crs = 4326).
+#'
+#' @param df data frame created by `ufp_read() `or `ufp_batch_read()`
+#'
+#' @return a `MULTIPOINT` object
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' 
+#' ufp_sf(df)
+#' }
 ufp_sf <- function(df) {
   df_msg <- if (is.data.frame(df) == FALSE) {
     stop("The input object is not a data frame.  Did you import data using the `ufp_read()` or `ufp_batch_read()` function?")
