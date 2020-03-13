@@ -44,7 +44,7 @@ ufp_move <- function(df) {
         ifelse(is.infinite(speed_ms), NA, speed_ms)
       )
     ) %>%
-    select(-c(starts_with("lag"), speed_inf))
+    select(-c(starts_with("lag"), speed_inf, distance))
 
   message(paste("A total of", sum(duplicated(df$Date_Time)), "rows had dupliated timestamps and were removed."))
 
