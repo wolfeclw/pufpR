@@ -60,29 +60,34 @@ place_lapse_dist <- function(df) {
     group_by(place_grp) %>%
     summarise(mlat = mean(lat),
               mlon = mean(lon))
+  
+  if (nrow(p_lapse_grps) > 1) {
+    
+    p_lapse1 <- p_lapse_grps[-nrow(p_lapse_grps), ] %>%
+      sf::st_as_sf(coords = c("mlon", "mlat"), crs = 4326)
 
-  p_lapse1 <- p_lapse_grps[-nrow(p_lapse_grps), ] %>%
-    sf::st_as_sf(coords = c("mlon", "mlat"), crs = 4326)
+    p_lapse2 <- p_lapse_grps[2:nrow(p_lapse_grps), ] %>%
+      sf::st_as_sf(coords = c("mlon", "mlat"), crs = 4326)
 
-  p_lapse2 <- p_lapse_grps[2:nrow(p_lapse_grps), ] %>%
-    sf::st_as_sf(coords = c("mlon", "mlat"), crs = 4326)
+    p_dist <- sf::st_distance(p_lapse1, p_lapse2, by_element = TRUE) %>%
+      enframe(name = NULL) %>%
+      mutate(place_lapse_grp = 1:nrow(.),
+             pl_distance = as.numeric(round(value, digits = 3))) %>%
+      select(place_lapse_grp,
+             pl_distance)
 
-  p_dist <- sf::st_distance(p_lapse1, p_lapse2, by_element = TRUE) %>%
-    enframe(name = NULL) %>%
-    mutate(place_lapse_grp = 1:nrow(.),
-           pl_distance = as.numeric(round(value, digits = 3))) %>%
-    select(place_lapse_grp,
-           pl_distance)
-
-   p_dist_join <- full_join(df, p_dist)
+    p_dist_join <- full_join(df, p_dist)
+  } else {
+    df
+  }
 }
 
 # `ufp_cluster` aggregates places identified by the circular variance algorithm
 # into larger clusters
 
-ufp_cluster <- function(df) {
+ufp_cluster <- function(df, cluster_threshold = NULL) {
   
-  d_clust <- df %>%
+  d_places <- df %>%
     filter(!is.na(place_grp)) %>%
     mutate(
       lag_rownum = lag(rw_num),
@@ -92,8 +97,16 @@ ufp_cluster <- function(df) {
     )  %>%
     select(-c(clust_break, lag_rownum, rw_diff, clust_break))
   
-  d_places <- full_join(df, d_clust)
+  clust_join <- full_join(df, d_places)
   
+  d_clust <- clust_join %>% 
+    group_by(cluster_grp) %>%
+    mutate(cluster_n = ifelse(is.na(cluster_grp), NA, n())) %>% 
+    ungroup()
+  
+  d_clust[!is.na(d_clust$cluster_n) & d_clust$cluster_n < 20, "cluster_grp"] <- NA 
+  
+  d_clust
 }
 
 
