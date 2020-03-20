@@ -3,6 +3,7 @@
 export(ufp_aggregate)
 export(ufp_batch_impute)
 export(ufp_batch_read)
+export(ufp_circularize)
 export(ufp_impute)
 export(ufp_move)
 export(ufp_read)

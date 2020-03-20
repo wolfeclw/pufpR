@@ -83,7 +83,9 @@ place_lapse_dist <- function(df) {
 }
 
 # `ufp_cluster` aggregates places identified by the circular variance algorithm
-# into larger clusters
+# into larger clusters. If the number of obs in a cluster is below the 
+# 'cluster_threshold', those observations are retained, but unclustered. 
+# Clusters are reordered if any observations are unclustered.
 
 ufp_cluster <- function(df, cluster_threshold = NULL) {
   
@@ -99,13 +101,49 @@ ufp_cluster <- function(df, cluster_threshold = NULL) {
   
   clust_join <- full_join(df, d_places)
   
-  d_clust <- clust_join %>% 
-    group_by(cluster_grp) %>%
-    mutate(cluster_n = ifelse(is.na(cluster_grp), NA, n())) %>% 
-    ungroup()
-  
-  d_clust[!is.na(d_clust$cluster_n) & d_clust$cluster_n < 20, "cluster_grp"] <- NA 
-  
+  if (!is.null(cluster_threshold)) {
+    
+    if(!is.numeric(cluster_threshold)) {
+      stop("Invalid 'type' of argument 'cluster_threshold.' Expecting a numeric value.", call. = FALSE)
+    }
+    
+    d_clust <- clust_join %>% 
+      group_by(cluster_grp) %>%
+      mutate(cluster_nrow = ifelse(is.na(cluster_grp), NA, n())) %>% 
+      ungroup()
+    
+    clust_n <- d_clust %>% 
+      group_by(cluster_nrow) %>% 
+      summarise(n_max = max(cluster_nrow)) %>% 
+      drop_na() %>% 
+      .$n_max
+    
+    rm_clust <- sum(clust_n < cluster_threshold)
+    
+    d_clust[!is.na(d_clust$cluster_nrow) & d_clust$cluster_nrow < cluster_threshold, "place_grp"] <- NA
+    
+    if(rm_clust > 0) {
+      d_clust <- d_clust[, !grepl("cluster_grp", colnames(d_clust))]
+
+      reorder_clust <- d_clust %>%
+        filter(!is.na(place_grp)) %>%
+        mutate(
+          lag_rownum = lag(rw_num),
+          rw_diff = rw_num - lag_rownum,
+          clust_break = ifelse(rw_diff > 1 | is.na(lag_rownum), 1, 0),
+          cluster_grp = cumsum(clust_break)
+        )  %>%
+        select(-c(clust_break, lag_rownum, rw_diff, clust_break))
+
+      d_clust <- full_join(d_clust, reorder_clust)
+      
+      message(paste("A total of", rm_clust, 
+                    "identified clusters had observations fewer than the 'cluster_threshold.'",
+                    "\n These observations were retained, but unclustered."))
+    }
+  } else {
+    d_clust <- clust_join
+  }
   d_clust
 }
 

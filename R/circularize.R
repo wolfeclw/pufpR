@@ -1,8 +1,14 @@
-
-
-
-###
-
+#' Title
+#'
+#' @param df 
+#' @param circvar_threshold 
+#' @param window 
+#' @param cluster_threshold 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_threshold = NULL) {
   
   if (sum(stringr::str_detect(names(df), "Sampling_Event"))) {
@@ -44,23 +50,12 @@ ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_thr
                                   place_grp))
     } 
     
-    d_clusters <- ufp_cluster(d_places)
-    
-    # if (!is.null(cluster_threshold)) {
-    #   d_places <- d_places %>% 
-    #     group_by(place_grp) %>%
-    #     mutate(place_n = ifelse(is.na(place_grp), NA, n())) %>% 
-    #     ungroup()
-    #   
-    #   d_places[!is.na(d_places$place_n) & d_places$place_n < cluster_threshold, "place_grp"] <- NA 
-    # }
+    d_clusters <- ufp_cluster(d_places, cluster_threshold = cluster_threshold)
 
     if (is.na(d_clusters$cluster_grp[window/2 - 1])) {
       d_clusters$cluster_grp <- zoo::na.locf(d_clusters$cluster_grp, fromLast = TRUE,
                                              na.rm = FALSE, maxgap = window/2)
     }
-    
-    
   }
   d_clusters
 }
