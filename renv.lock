@@ -72,12 +72,26 @@
       "Repository": "CRAN",
       "Hash": "3997fd62345a616e59e8161ee0a5816f"
     },
+    "boot": {
+      "Package": "boot",
+      "Version": "1.3-24",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "72557d88b5f42f01221dfa436de99301"
+    },
     "callr": {
       "Package": "callr",
       "Version": "3.4.3",
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "643163a00cb536454c624883a10ae0bc"
+    },
+    "circular": {
+      "Package": "circular",
+      "Version": "0.4-93",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "76d2b394bcecfb03d1d81a7d7264d55e"
     },
     "class": {
       "Package": "class",
@@ -193,10 +207,16 @@
     },
     "glue": {
       "Package": "glue",
-      "Version": "1.4.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "2aefa994e8df5da17dc09afd80f924d5"
+      "Version": "1.4.0.9000",
+      "Source": "GitHub",
+      "Remotes": "r-lib/vctrs",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "glue",
+      "RemoteUsername": "tidyverse",
+      "RemoteRef": "master",
+      "RemoteSha": "a3375fe0c8ba6b3f160e4774d6b4ad883944b6fb",
+      "Hash": "e52672b19a18f454a703b5eaa292321c"
     },
     "hms": {
       "Package": "hms",
@@ -246,6 +266,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "6dfe8bf774944bd5595785e3229d8771"
+    },
+    "mvtnorm": {
+      "Package": "mvtnorm",
+      "Version": "1.1-0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "b4467e29ec60b2d05e361c9141e4fc59"
     },
     "pillar": {
       "Package": "pillar",

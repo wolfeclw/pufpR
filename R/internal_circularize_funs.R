@@ -70,7 +70,7 @@ place_lapse_dist <- function(df) {
       sf::st_as_sf(coords = c("mlon", "mlat"), crs = 4326)
 
     p_dist <- sf::st_distance(p_lapse1, p_lapse2, by_element = TRUE) %>%
-      enframe(name = NULL) %>%
+      tibble::enframe(name = NULL) %>%
       mutate(place_lapse_grp = 1:nrow(.),
              pl_distance = as.numeric(round(value, digits = 3))) %>%
       select(place_lapse_grp,
@@ -115,7 +115,7 @@ ufp_cluster <- function(df, cluster_threshold = NULL) {
     clust_n <- d_clust %>% 
       group_by(cluster_nrow) %>% 
       summarise(n_max = max(cluster_nrow)) %>% 
-      drop_na() %>% 
+      tidyr::drop_na() %>% 
       .$n_max
     
     rm_clust <- sum(clust_n < cluster_threshold)
