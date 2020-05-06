@@ -9,7 +9,7 @@
 #' @export
 #'
 #' @examples
-ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_threshold = NULL) {
+ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_threshold = NULL, show_cirvar = FALSE) {
   
   if (sum(stringr::str_detect(names(df), "Sampling_Event"))) {
     d <- group_by(df, Sampling_Event)
@@ -56,6 +56,12 @@ ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_thr
       d_clusters$cluster_grp <- zoo::na.locf(d_clusters$cluster_grp, fromLast = TRUE,
                                              na.rm = FALSE, maxgap = window/2)
     }
+  }
+  
+  if (show_cirvar == TRUE) {
+    d_clusters <- d_clusters %>% select(-c(move_break:pl_distance, cluster_nrow))
+  } else {
+    d_clusters <- d_clusters %>% select(-c(circvar:pl_distance, cluster_nrow))
   }
   d_clusters
 }

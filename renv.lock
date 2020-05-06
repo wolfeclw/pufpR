@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "3.6.3",
+    "Version": "4.0.0",
     "Repositories": [
       {
         "Name": "CRAN",
@@ -95,10 +95,10 @@
     },
     "class": {
       "Package": "class",
-      "Version": "7.3-15",
+      "Version": "7.3-16",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "4fba6a022803b6c3f30fd023be3fa818"
+      "Hash": "ebc639c4432a2e9c17f195d004848100"
     },
     "classInt": {
       "Package": "classInt",
@@ -207,16 +207,10 @@
     },
     "glue": {
       "Package": "glue",
-      "Version": "1.4.0.9000",
-      "Source": "GitHub",
-      "Remotes": "r-lib/vctrs",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "glue",
-      "RemoteUsername": "tidyverse",
-      "RemoteRef": "master",
-      "RemoteSha": "a3375fe0c8ba6b3f160e4774d6b4ad883944b6fb",
-      "Hash": "e52672b19a18f454a703b5eaa292321c"
+      "Version": "1.4.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "2aefa994e8df5da17dc09afd80f924d5"
     },
     "hms": {
       "Package": "hms",
@@ -234,10 +228,10 @@
     },
     "lattice": {
       "Package": "lattice",
-      "Version": "0.20-38",
+      "Version": "0.20-41",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "848f8c593fd1050371042d18d152e3d7"
+      "Hash": "fbd9285028b0263d76d18c95ae51a53d"
     },
     "lifecycle": {
       "Package": "lifecycle",
@@ -388,10 +382,10 @@
     },
     "sf": {
       "Package": "sf",
-      "Version": "0.9-3",
+      "Version": "0.9-2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "f16ad0ac903df6727dbfb2e30eafcc26"
+      "Hash": "473de5599639f9d3e46a1c5399efdc9b"
     },
     "sp": {
       "Package": "sp",

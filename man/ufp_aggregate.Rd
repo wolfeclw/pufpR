@@ -4,8 +4,12 @@
 \alias{ufp_aggregate}
 \title{Aggregate PUFP Time Series}
 \usage{
-ufp_aggregate(df, unit = "5 seconds", floor_or_celiling = "floor",
-  summary_fun = "median")
+ufp_aggregate(
+  df,
+  unit = "5 seconds",
+  floor_or_celiling = "floor",
+  summary_fun = "median"
+)
 }
 \arguments{
 \item{df}{an object created by `ufp_read()` or `ufp_batch_read()`.}

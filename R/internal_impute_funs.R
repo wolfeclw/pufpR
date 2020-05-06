@@ -1,7 +1,8 @@
 ##### INTERNAL IMPUTE FUNCTIONS
 
 
-impute_coords_dist <- function(df, distance_threshold = 100, jitter_amount = 0.00001) {
+impute_coords_dist <- function(df, distance_threshold = 100, jitter_amount = 0.00001, 
+                               show_lapse_distance = FALSE) {
   rm_open_lapse <- df %>%
     mutate(r = row_number()) %>%
     filter(
@@ -109,7 +110,11 @@ impute_coords_dist <- function(df, distance_threshold = 100, jitter_amount = 0.0
     message("Coordinates were not imputed based on distance.  There are no lapses enclosed with GPS coordinates.")
   }
   
-  d_dist_imputed
+  if (show_lapse_distance == TRUE) {
+    d_dist_imputed
+  } else {
+    d_dist_imputed %>% select(-lapse_distance)
+  }
 }
 
 ###

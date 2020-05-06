@@ -4,8 +4,7 @@
 \alias{ufp_read}
 \title{Read PUFP .txt File}
 \usage{
-ufp_read(path, tz = "America/New_York", truncate_ufp = TRUE,
-  coords = TRUE)
+ufp_read(path, tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE)
 }
 \arguments{
 \item{path}{a path.}

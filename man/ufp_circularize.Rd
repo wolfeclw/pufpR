@@ -4,8 +4,13 @@
 \alias{ufp_circularize}
 \title{Title}
 \usage{
-ufp_circularize(df, circvar_threshold = 0.7, window = 60,
-  cluster_threshold = NULL)
+ufp_circularize(
+  df,
+  circvar_threshold = 0.7,
+  window = 60,
+  cluster_threshold = NULL,
+  show_cirvar = FALSE
+)
 }
 \arguments{
 \item{df}{}
@@ -15,6 +20,9 @@ ufp_circularize(df, circvar_threshold = 0.7, window = 60,
 \item{window}{}
 
 \item{cluster_threshold}{}
+}
+\value{
+
 }
 \description{
 Title

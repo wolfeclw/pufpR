@@ -4,9 +4,15 @@
 \alias{ufp_batch_impute}
 \title{Impute Missing GPS Data}
 \usage{
-ufp_batch_impute(df, distance_threshold = 100, jitter_amount = 1e-05,
-  fill_open_lapses = FALSE, speed_threshold = 5, speed_window = 60,
-  open_lapse_length = 600)
+ufp_batch_impute(
+  df,
+  distance_threshold = 100,
+  jitter_amount = 1e-05,
+  fill_open_lapses = FALSE,
+  speed_threshold = 5,
+  speed_window = 60,
+  open_lapse_length = 600
+)
 }
 \arguments{
 \item{df}{an object created by `ufp_batch_read()`.}

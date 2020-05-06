@@ -4,8 +4,13 @@
 \alias{ufp_batch_read}
 \title{Read Multiple PUFP .txt Files}
 \usage{
-ufp_batch_read(paths, event_threshold = 10, tz = "America/New_York",
-  truncate_ufp = TRUE, coords = TRUE)
+ufp_batch_read(
+  paths,
+  event_threshold = 10,
+  tz = "America/New_York",
+  truncate_ufp = TRUE,
+  coords = TRUE
+)
 }
 \arguments{
 \item{paths}{a vector of paths}

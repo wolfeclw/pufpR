@@ -4,9 +4,15 @@
 \alias{ufp_impute}
 \title{Impute Missing GPS Data}
 \usage{
-ufp_impute(df, distance_threshold = 100, jitter_amount = 1e-05,
-  fill_open_lapses = FALSE, speed_threshold = 5, speed_window = 60,
-  open_lapse_length = 600)
+ufp_impute(
+  df,
+  distance_threshold = 100,
+  jitter_amount = 1e-05,
+  fill_open_lapses = FALSE,
+  speed_threshold = 5,
+  speed_window = 60,
+  open_lapse_length = 600
+)
 }
 \arguments{
 \item{df}{data frame created by `ufp_read()`.}
