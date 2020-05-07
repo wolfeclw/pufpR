@@ -9,7 +9,11 @@
 #' @export
 #'
 #' @examples
-ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_threshold = NULL, show_cirvar = FALSE) {
+#' #' \dontrun{
+#' 
+#' ufp_circularize(df, circvar_threshold = .7, window = 60, cluster_threshold = NULL, show_circvar = FALSE)
+#' }
+ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_threshold = NULL, show_circvar = FALSE) {
   
   if (sum(stringr::str_detect(names(df), "Sampling_Event"))) {
     d <- group_by(df, Sampling_Event)
@@ -58,7 +62,7 @@ ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_thr
     }
   }
   
-  if (show_cirvar == TRUE) {
+  if (show_circvar == TRUE) {
     d_clusters <- d_clusters %>% select(-c(move_break:pl_distance, cluster_nrow))
   } else {
     d_clusters <- d_clusters %>% select(-c(circvar:pl_distance, cluster_nrow))

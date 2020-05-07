@@ -42,7 +42,7 @@ ufp_impute <- function(df, distance_threshold = 100, jitter_amount = 0.00001, sh
   }
 
   d_imputed <- if (sum(df$GPS_Valid) == nrow(df)) {
-    df
+    df %>% mutate(imputed_coord = 0)
   } else if (fill_open_lapses == TRUE) {
     impute_coords_open(df,
       distance_threshold = distance_threshold, jitter_amount = jitter_amount, 
