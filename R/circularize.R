@@ -55,17 +55,23 @@ ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_thr
     } 
     
     d_clusters <- ufp_cluster(d_places, cluster_threshold = cluster_threshold)
-
+    
     if (is.na(d_clusters$cluster_grp[window/2 - 1])) {
       d_clusters$cluster_grp <- zoo::na.locf(d_clusters$cluster_grp, fromLast = TRUE,
                                              na.rm = FALSE, maxgap = window/2)
     }
-  }
+  } else if (sum(is.na(df$lat)) == nrow(df)) {
+    d_clusters <- df
+    message("The input data frame does not have valid 'lon/lat' coordinates.  Data unable to be clustered.")
+  } 
   
-  if (show_circvar == TRUE) {
+  if (show_circvar == TRUE & sum(is.na(df$lat)) != nrow(df)) {
     d_clusters <- d_clusters %>% select(-c(move_break:pl_distance, cluster_nrow))
-  } else {
+  } else if (show_circvar == FALSE & sum(is.na(df$lat)) != nrow(df)) {
     d_clusters <- d_clusters %>% select(-c(circvar:pl_distance, cluster_nrow))
+  } else if (sum(is.na(df$lat)) == nrow(df)) {
+    d_clusters <- d_clusters %>% mutate(circvar = NA,
+                         cluster_grp = NA)
   }
   d_clusters
 }
