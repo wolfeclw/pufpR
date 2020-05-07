@@ -66,8 +66,3 @@ ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_thr
   d_clusters
 }
 
-####
-
-
-
-#   

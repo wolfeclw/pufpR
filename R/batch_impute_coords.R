@@ -32,8 +32,9 @@
 #' ufp_batch_impute(df, distance_threshold = 100, jitter_amount = 0.00001, fill_open_lapses = FALSE,
 #' speed_threshold = 5, speed_window = 60, open_lapse_length = 600)
 #' }
-ufp_batch_impute <- function(df, distance_threshold = 100, jitter_amount = 0.00001, fill_open_lapses = FALSE,
-                       speed_threshold = 5, speed_window = 60, open_lapse_length = 600) {
+ufp_batch_impute <- function(df, distance_threshold = 100, jitter_amount = 0.00001, show_lapse_distance = FALSE,
+                             fill_open_lapses = FALSE, speed_threshold = 5, speed_window = 60, 
+                             open_lapse_length = 600) {
   
   if (sum(stringr::str_detect(names(df), "Sampling_Event")) == 0) {
     stop("Column 'Sampling_Event' not found.")
@@ -41,28 +42,20 @@ ufp_batch_impute <- function(df, distance_threshold = 100, jitter_amount = 0.000
   
   impute_split <- df %>% split(., .$Sampling_Event)
   
-  batch_impute <- function(ufp_split_df, distance_threshold = distance_threshold, jitter_amount = jitter_amount,
-                           fill_open_lapses = fill_open_lapses, speed_threshold = speed_threshold, 
-                           speed_window = speed_window, open_lapse_length = open_lapse_length) {
-    d_split_imputed <- if (sum(ufp_split_df$GPS_Valid) == nrow(ufp_split_df)) {
-      ufp_split_df
-    } else if (fill_open_lapses == TRUE) {
-      impute_coords_open(ufp_split_df,
-                         distance_threshold = distance_threshold, jitter_amount = jitter_amount,
-                         speed_threshold = speed_threshold, speed_window = speed_window,
-                         open_lapse_length = open_lapse_length
-      )
+  d_imputed <- if(fill_open_lapses == FALSE) {
+    map_df(impute_split, ~ impute_coords_open(.,
+                                              distance_threshold = distance_threshold, 
+                                              jitter_amount = jitter_amount,
+                                              show_lapse_distance = show_lapse_distance))
     } else {
-      impute_coords_dist(ufp_split_df, distance_threshold = distance_threshold, jitter_amount = jitter_amount)
+    map_df(impute_split, ~ impute_coords_open(.,
+                                              distance_threshold = distance_threshold, 
+                                              jitter_amount = jitter_amount, 
+                                              show_lapse_distance = show_lapse_distance, 
+                                              speed_threshold = speed_threshold,
+                                              speed_window = speed_window, 
+                                              open_lapse_length = open_lapse_length))
     }
-  }
-  
-  d_imputed <- map(impute_split, ~ batch_impute(.,
-                                              distance_threshold = distance_threshold,
-                                              jitter_amount = jitter_amount, speed_threshold = speed_threshold,
-                                              speed_window = speed_window, fill_open_lapses = fill_open_lapses
-  )) %>%
-    reduce(., rbind)
 
   if (sum(df$GPS_Valid) != nrow(df)) {
     n_imputed <- sum(d_imputed$imputed_coord, na.rm = TRUE)

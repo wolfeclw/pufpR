@@ -119,12 +119,13 @@ impute_coords_dist <- function(df, distance_threshold = 100, jitter_amount = 0.0
 
 ###
 
-impute_coords_open <- function(df, distance_threshold = 100, jitter_amount = 0.00001, speed_threshold = 5,
-                               speed_window = 60, open_lapse_length = 600) {
+impute_coords_open <- function(df, 
+                               distance_threshold = 100, jitter_amount = 0.00001, show_lapse_distance = FALSE,
+                               speed_threshold = 5, speed_window = 60, open_lapse_length = 600) {
   d_dist_imputed <- impute_coords_dist(df,
                                        distance_threshold = distance_threshold,
-                                       jitter_amount = jitter_amount
-  ) %>%
+                                       jitter_amount = jitter_amount,
+                                       show_lapse_distance = show_lapse_distance) %>%
     mutate(r = row_number())
   
   open_lapse_head <- d_dist_imputed %>%

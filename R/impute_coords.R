@@ -32,8 +32,9 @@
 #' ufp_impute(df, distance_threshold = 100, jitter_amount = 0.00001, fill_open_lapses = FALSE,
 #' speed_threshold = 5, speed_window = 60, open_lapse_length = 600)
 #' }
-ufp_impute <- function(df, distance_threshold = 100, jitter_amount = 0.00001, fill_open_lapses = FALSE,
-                       speed_threshold = 5, speed_window = 60, open_lapse_length = 600) {
+ufp_impute <- function(df, distance_threshold = 100, jitter_amount = 0.00001, show_lapse_distance = FALSE,
+                       fill_open_lapses = FALSE, speed_threshold = 5, speed_window = 60, 
+                       open_lapse_length = 600) {
   if (sum(stringr::str_detect(names(df), "Sampling_Event"))) {
     stop("There are multiple sampling events in the input data frame. Use `batch_impute_coords() to correctly impute missing lat/lon.",
       call. = FALSE
@@ -44,12 +45,13 @@ ufp_impute <- function(df, distance_threshold = 100, jitter_amount = 0.00001, fi
     df
   } else if (fill_open_lapses == TRUE) {
     impute_coords_open(df,
-      distance_threshold = distance_threshold, jitter_amount = jitter_amount,
-      speed_threshold = speed_threshold, speed_window = speed_window,
+      distance_threshold = distance_threshold, jitter_amount = jitter_amount, 
+      show_lapse_distance = show_lapse_distance, speed_threshold = speed_threshold, speed_window = speed_window,
       open_lapse_length = open_lapse_length
     )
   } else {
-    impute_coords_dist(df, distance_threshold = distance_threshold, jitter_amount = jitter_amount)
+    impute_coords_dist(df, distance_threshold = distance_threshold, jitter_amount = jitter_amount,
+                       show_lapse_distance = show_lapse_distance)
   }
 
   if (sum(df$GPS_Valid) != nrow(df)) {
