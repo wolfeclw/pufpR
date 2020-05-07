@@ -43,7 +43,7 @@ ufp_batch_impute <- function(df, distance_threshold = 100, jitter_amount = 0.000
   impute_split <- df %>% split(., .$Sampling_Event)
   
   d_imputed <- if(fill_open_lapses == FALSE) {
-    map_df(impute_split, ~ impute_coords_open(.,
+    map_df(impute_split, ~ impute_coords_dist(.,
                                               distance_threshold = distance_threshold, 
                                               jitter_amount = jitter_amount,
                                               show_lapse_distance = show_lapse_distance))

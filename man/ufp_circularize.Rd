@@ -9,7 +9,7 @@ ufp_circularize(
   circvar_threshold = 0.7,
   window = 60,
   cluster_threshold = NULL,
-  show_cirvar = FALSE
+  show_circvar = FALSE
 )
 }
 \arguments{
@@ -26,4 +26,10 @@ ufp_circularize(
 }
 \description{
 Title
+}
+\examples{
+#' \dontrun{
+
+ufp_circularize(df, circvar_threshold = .7, window = 60, cluster_threshold = NULL, show_circvar = FALSE)
+}
 }

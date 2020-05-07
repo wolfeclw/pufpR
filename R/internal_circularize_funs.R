@@ -78,7 +78,7 @@ place_lapse_dist <- function(df) {
 
     p_dist_join <- full_join(df, p_dist)
   } else {
-    df
+    df %>% mutate(pl_distance = NA)
   }
 }
 
