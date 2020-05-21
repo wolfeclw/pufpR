@@ -19,6 +19,10 @@
 #' }
 ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_threshold = NULL, show_circvar = FALSE) {
   
+  if (sum(stringr::str_detect(names(df), "azimuth")) == 0) {
+    stop("Column 'azimuth' not found.  Use `ufp_move()` to calculate the azimuth of the UFP measurements.",
+         call. = FALSE)
+  }
   if (sum(stringr::str_detect(names(df), "Sampling_Event"))) {
     d <- group_by(df, Sampling_Event)
   } else {
@@ -65,12 +69,16 @@ ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_thr
       d_clusters$cluster_grp <- zoo::na.locf(d_clusters$cluster_grp, fromLast = TRUE,
                                              na.rm = FALSE, maxgap = window/2)
     }
-  } else if (sum(d_variance$move_break, na.rm = TRUE) == 0) {
-    d_clusters <- df
-    message("No clusters were identified.")
+  } else if (sum(!is.na(df$lat) > 0) & sum(d_variance$move_break, na.rm = TRUE) == 0) {
+    d_clusters <- d_variance %>% 
+      select(-c(move_break, rw_num)) %>% 
+      mutate(cluster_grp = NA)
+    message(paste0("NO CLUSTERS IDENTIFIED - the participant may have been in transit",
+                   "\n for the duration of the sampling period."))
   } else if (sum(is.na(df$lat)) == nrow(df)) {
     d_clusters <- df
-    message("The input data frame does not have valid 'lon/lat' coordinates.  Data unable to be clustered.")
+    message(paste0("INVALID INPUT DATA - the input data frame does not have valid 'lon/lat' coordinates.",
+                   "\n Data unable to be clustered."))
   } 
   
   if (show_circvar == TRUE & sum(is.na(df$lat)) != nrow(df)) {

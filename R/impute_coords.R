@@ -42,7 +42,7 @@ ufp_impute <- function(df, distance_threshold = 100, jitter_amount = 0.00001, sh
     )
   }
 
-  d_imputed <- if (sum(df$GPS_Valid) == nrow(df)) {
+  d_imputed <- if (sum(df$GPS_Valid) == nrow(df) | sum(df$GPS_Valid) == 0) {
     df %>% mutate(imputed_coord = 0)
   } else if (fill_open_lapses == TRUE) {
     impute_coords_open(df,
@@ -70,8 +70,12 @@ ufp_impute <- function(df, distance_threshold = 100, jitter_amount = 0.00001, sh
   }
 
   if (sum(df$GPS_Valid) == nrow(df)) {
-    message("All location data is complete--coordinates were not imputed.")
+    message("All location data is complete - coordinates were not imputed.")
   }
-
+  
+  if (sum(df$GPS_Valid) == 0) {
+    message("All lat/lon values are invalid.")
+  }
+  
   d_imputed
 }

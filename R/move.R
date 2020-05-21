@@ -20,7 +20,11 @@ ufp_move <- function(df) {
   if (sum(stringr::str_detect(names(df), "lat")) == 0) {
     stop("No 'lat' or 'lon' colunms found.  Did you set 'coords = TRUE' when reading PUFP file?")
   }
-
+  
+  if (sum(is.na(df$lat)) == nrow(df)) {
+    message("The input data frame does not have valid 'lon/lat' coordinates. Speed and azimuth were not calculated.")
+  }
+  
   d_speed <- df %>%
     filter(!duplicated(Date_Time)) %>% 
     arrange(Date_Time) # arrange by Date_Time just to be safe
