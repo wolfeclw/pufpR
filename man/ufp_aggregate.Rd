@@ -35,5 +35,4 @@ Aggregate PUFP time series by specified time unit
 ufp_aggregate(df, unit = "5 seconds", floor_or_ceiling = "floor",
 summary_fun = "median")
 }
-
 }

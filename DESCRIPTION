@@ -22,7 +22,9 @@ Imports:
     scales,
     sf,
     zoo,
-    tidyr
+    tidyr,
+    circular,
+    tibble
 RoxygenNote: 7.1.0
 Suggests: 
     testthat

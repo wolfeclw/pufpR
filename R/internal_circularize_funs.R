@@ -136,13 +136,16 @@ ufp_cluster <- function(df, cluster_threshold = NULL) {
         select(-c(clust_break, lag_rownum, rw_diff, clust_break))
 
       d_clust <- full_join(d_clust, reorder_clust)
+      d_clust <- d_clust %>% 
+        select(-c(move_break, rw_num, place_lapse_grp, place_grp, clustered_coord, pl_distance, cluster_nrow))
       
       message(paste("A total of", rm_clust, 
                     "identified clusters had observations fewer than the 'cluster_threshold.'",
                     "\n These observations were retained, but unclustered."))
     }
   } else {
-    d_clust <- clust_join
+    d_clust <- clust_join %>% 
+      select(-c(move_break, rw_num, place_lapse_grp, place_grp, clustered_coord, pl_distance))
   }
   d_clust
 }

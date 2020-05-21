@@ -11,6 +11,7 @@
 #' imputed. Default = 100.
 #' @param jitter_amount numeric; amount of jitter to apply to imputed coords.
 #' Default = 0.00001 decimal degrees. See \code{\link[sf]{st_jitter}}.
+#' @param show_lapse_distance NEEDS A DEF
 #' @param fill_open_lapses logical; impute missing coordinates at the 
 #' beginning and end of the data frame (i.e. lapses not enclosed by known 
 #' coordinates). Default = FALSE.

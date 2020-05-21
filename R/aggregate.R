@@ -20,7 +20,7 @@
 #' ufp_aggregate(df, unit = "5 seconds", floor_or_ceiling = "floor",
 #' summary_fun = "median")
 #' }
-#' 
+#' @importFrom stats median 
 ufp_aggregate <- function(df, unit = "5 seconds", floor_or_celiling = "floor",
                           summary_fun = "median") {
   if (sum(stringr::str_detect(names(df), "Date_Time")) == 0) {

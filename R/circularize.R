@@ -1,17 +1,21 @@
+
+
 #' Title
 #'
-#' @param df 
-#' @param circvar_threshold 
-#' @param window 
-#' @param cluster_threshold 
+#' @param df NEED DEF
+#' @param circvar_threshold NEED DEF
+#' @param window NEED DEF
+#' @param cluster_threshold NEED DEF
+#' @param show_circvar NEED DEF
 #'
-#' @return
+#' @return NEED DEF
 #' @export
 #'
 #' @examples
-#' #' \dontrun{
+#' \dontrun{
 #' 
-#' ufp_circularize(df, circvar_threshold = .7, window = 60, cluster_threshold = NULL, show_circvar = FALSE)
+#' ufp_circularize(df, circvar_threshold = .7, window = 60, cluster_threshold = NULL, 
+#' show_circvar = FALSE)
 #' }
 ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_threshold = NULL, show_circvar = FALSE) {
   
@@ -47,7 +51,7 @@ ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_thr
     
     d_places <- d_places %>%
       ufp_place_lapse() %>%
-      place_lapse_dist()
+      place_lapse_dist() 
     
     if (max(d_places$place_grp, na.rm = TRUE) > 1) {
       d_places <- d_places %>%
@@ -61,15 +65,18 @@ ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_thr
       d_clusters$cluster_grp <- zoo::na.locf(d_clusters$cluster_grp, fromLast = TRUE,
                                              na.rm = FALSE, maxgap = window/2)
     }
+  } else if (sum(d_variance$move_break, na.rm = TRUE) == 0) {
+    d_clusters <- df
+    message("No clusters were identified.")
   } else if (sum(is.na(df$lat)) == nrow(df)) {
     d_clusters <- df
     message("The input data frame does not have valid 'lon/lat' coordinates.  Data unable to be clustered.")
   } 
   
   if (show_circvar == TRUE & sum(is.na(df$lat)) != nrow(df)) {
-    d_clusters <- d_clusters %>% select(-c(move_break:pl_distance, cluster_nrow))
+    d_clusters <- d_clusters
   } else if (show_circvar == FALSE & sum(is.na(df$lat)) != nrow(df)) {
-    d_clusters <- d_clusters %>% select(-c(circvar:pl_distance, cluster_nrow))
+    d_clusters <- d_clusters %>% select(-circvar)
   } else if (sum(is.na(df$lat)) == nrow(df)) {
     d_clusters <- d_clusters %>% mutate(circvar = NA,
                          cluster_grp = NA)
@@ -77,3 +84,4 @@ ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_thr
   d_clusters
 }
 
+### REWRITE SO THAT SELECT ONLY EMOVES CIRCVAR NOT MOVEBREAK JUNK...PL DISTANCE

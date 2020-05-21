@@ -13,23 +13,26 @@ ufp_circularize(
 )
 }
 \arguments{
-\item{df}{}
+\item{df}{NEED DEF}
 
-\item{circvar_threshold}{}
+\item{circvar_threshold}{NEED DEF}
 
-\item{window}{}
+\item{window}{NEED DEF}
 
-\item{cluster_threshold}{}
+\item{cluster_threshold}{NEED DEF}
+
+\item{show_circvar}{NEED DEF}
 }
 \value{
-
+NEED DEF
 }
 \description{
 Title
 }
 \examples{
-#' \dontrun{
+\dontrun{
 
-ufp_circularize(df, circvar_threshold = .7, window = 60, cluster_threshold = NULL, show_circvar = FALSE)
+ufp_circularize(df, circvar_threshold = .7, window = 60, cluster_threshold = NULL, 
+show_circvar = FALSE)
 }
 }
