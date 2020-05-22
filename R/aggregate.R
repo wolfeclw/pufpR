@@ -36,8 +36,8 @@ ufp_aggregate <- function(df, unit = "5 seconds", floor_or_celiling = "floor",
       mutate(
         Date = lubridate::as_date(Date_Time),
         Time = hms::as_hms(Date_Time),
-        GPS_Valid = ceiling(GPS_Valid)
-      ) %>%
+        GPS_Valid = ifelse(is.na(lat), 0, 1)
+        )  %>%
       select(Date_Time, Date, Time, everything())
   } else {
     d_agg <- df %>%
@@ -48,10 +48,24 @@ ufp_aggregate <- function(df, unit = "5 seconds", floor_or_celiling = "floor",
       mutate(
         Date = lubridate::as_date(Date_Time),
         Time = hms::as_hms(Date_Time),
-        GPS_Valid = ceiling(GPS_Valid)
+        GPS_Valid = ifelse(is.na(lat), 0, 1)
       ) %>%
       select(Date_Time, Date, Time, everything())
   }
-
-  d_agg
+  
+  char_cols <- select_if(df, is.character) %>% names()
+  rm_cols <- char_cols[!stringr::str_detect(char_cols, "Sensor")]
+  
+  if (length(rm_cols > 0)) {
+  message("Columns `", paste(rm_cols, collapse = ', '),
+          "` are of class 'character' and were removed during aggregation.")
+  }
+  
+  if (sum(stringr::str_detect(char_cols, "Sensor")) == 1) {
+    d_agg %>%
+      mutate(Sensor = unique(df$Sensor)) %>% 
+      select(Date_Time:Time, starts_with("UFP"), Sensor, everything())
+  } else {
+    d_agg
+  }
 }
