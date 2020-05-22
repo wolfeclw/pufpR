@@ -2,35 +2,20 @@
 ###### INTERNAL READ FUNCTIONS #####
 
 import_pufp <- function(path) {
-  readr::read_tsv(path,
-                  skip = 1, trim_ws = TRUE, col_names = FALSE,
-                  col_types = readr::cols(
-                    .default = readr::col_character(),
-                    X2 = readr::col_time(),
-                    X3 = readr::col_double()
+  options(warn = -1)
+  d <- pkgcond::suppress_conditions(readr::read_tsv(path,
+                  skip = 1, trim_ws = TRUE, 
+                  col_names = c("Date", "Time", "UFP_conc", "GPS_status", 
+                                "GPS_Signal", "na_col", "Sensor", "Warning"
                   )
-  )
-}
-
-cols_pufp <- function(path) {
-  d <- suppressWarnings(import_pufp(path))
+  ), class = c("warning", "message"))
   
-  d_names <- c("Date", "Time", "UFP_conc", "GPS_status", "GPS_Signal", "na_col", "Sensor")
-  d <- stats::setNames(d, d_names)
-  
-  if (length(d) > 7) {
-    d <- suppressMessages(as_tibble(d, .name_repair = "unique")) %>%
-      rename(Warning = 8)
-  } else {
-    d <- mutate(d, Warning = NA)
-  }
-  
-  d <- select(d, -na_col)
-  d
+  d %>% 
+    select(-na_col)
 }
 
 clean_pufp <- function(path, tz = "America/New_York", truncate_ufp = TRUE) {
-  d_cols <- cols_pufp(path)
+  d_cols <- import_pufp(path)
   d_cols$Date <- lubridate::mdy(d_cols$Date)
   d_cols$Date_Time <- lubridate::ymd_hms(paste(d_cols$Date, d_cols$Time), tz = tz)
   d_cols <- arrange(d_cols, Date_Time)

@@ -16,7 +16,7 @@ ufp_places <- function(df) {
     )  %>%
     select(-c(move_break, lag_rownum, rw_diff, place_break))
   
-  d_places <- full_join(df, d_places)
+  d_places <- suppressMessages(full_join(df, d_places))
 }
 
 # `ufp_lapse` identifies lapses between places
@@ -43,7 +43,7 @@ ufp_place_lapse <- function(df) {
       ) %>%
       select(-c(place_lapse, lag_rownum, rw_diff, break_yn))
     
-    c_lapse_join <- full_join(df, d_place_lapse)
+    c_lapse_join <- suppressMessages(full_join(df, d_place_lapse))
   }
 }
 
@@ -76,7 +76,7 @@ place_lapse_dist <- function(df) {
       select(place_lapse_grp,
              pl_distance)
 
-    p_dist_join <- full_join(df, p_dist)
+    p_dist_join <- suppressMessages(full_join(df, p_dist))
   } else {
     df %>% mutate(pl_distance = NA)
   }
@@ -99,7 +99,7 @@ ufp_cluster <- function(df, cluster_threshold = NULL) {
     )  %>%
     select(-c(clust_break, lag_rownum, rw_diff, clust_break))
   
-  clust_join <- full_join(df, d_places)
+  clust_join <- suppressMessages(full_join(df, d_places))
   
   if (!is.null(cluster_threshold)) {
     
@@ -135,7 +135,7 @@ ufp_cluster <- function(df, cluster_threshold = NULL) {
         )  %>%
         select(-c(clust_break, lag_rownum, rw_diff, clust_break))
 
-      d_clust <- full_join(d_clust, reorder_clust)
+      d_clust <- suppressMessages(full_join(d_clust, reorder_clust))
       d_clust <- d_clust %>% 
         select(-c(move_break, rw_num, place_lapse_grp, place_grp, clustered_coord, pl_distance, cluster_nrow))
       
