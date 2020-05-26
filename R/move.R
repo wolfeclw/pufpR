@@ -1,32 +1,32 @@
 
 #' Calculate Speed and Azimuth of PUFP Measurements
-#' 
+#'
 #' Calculates the speed and azimuth (bearing) of consecutive PUFP measurements.
-#' If multiple sampling events are included in the input file, 
+#' If multiple sampling events are included in the input file,
 #' speed and azimuth are calcuated by event.
 #'
 #' @param df data frame created by `ufp_read() `or `ufp_batch_read()`
 #'
-#' @return a data frame.  Speed is expressed in meters per second; azimuth is 
+#' @return a data frame.  Speed is expressed in meters per second; azimuth is
 #' expressed in degrees.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' 
+#'
 #' ufp_move(df)
 #' }
 ufp_move <- function(df) {
   if (sum(stringr::str_detect(names(df), "lat")) == 0) {
     stop("No 'lat' or 'lon' colunms found.  Did you set 'coords = TRUE' when reading PUFP file?")
   }
-  
+
   if (sum(is.na(df$lat)) == nrow(df)) {
     message("The input data frame does not have valid 'lon/lat' coordinates. Speed and azimuth were not calculated.")
   }
-  
+
   d_speed <- df %>%
-    filter(!duplicated(Date_Time)) %>% 
+    filter(!duplicated(Date_Time)) %>%
     arrange(Date_Time) # arrange by Date_Time just to be safe
 
   if (sum(stringr::str_detect(names(df), "Sampling_Event"))) {

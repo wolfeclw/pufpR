@@ -1,37 +1,39 @@
 
 
 #' Read Multiple PUFP .txt Files
-#' 
+#'
 #' Reads and cleans text file output from PUFP sensor.
 #'
 #' @param paths a vector of paths
-#' @param event_threshold numeric; difftime value in minutes to differentiate 
-#' sampling events. Consecutive measurements that exceed this threshold are separated 
+#' @param event_threshold numeric; difftime value in minutes to differentiate
+#' sampling events. Consecutive measurements that exceed this threshold are separated
 #' into new sampling events. Default = 10.
-#' @param tz a character string that specifies which time zone to parse the 
+#' @param tz a character string that specifies which time zone to parse the
 #' date with. Default = "America/New_York."
-#' @param truncate_ufp logical; truncate UFP concentration? If TRUE 
+#' @param truncate_ufp logical; truncate UFP concentration? If TRUE
 #' (the default), UFP concentrations above 250K will be right censored.
-#' @param coords logical; arse GPS string to derive latitude and longitude? 
+#' @param coords logical; arse GPS string to derive latitude and longitude?
 #' Default = TRUE.
 #'
-#' @return a tibble. Additional columns are created for "Sampling_Event" and 
+#' @return a tibble. Additional columns are created for "Sampling_Event" and
 #' "Sampling_Day."  Sampling events represent discreet intervals in sampling
-#' defined by the event threshold.  Sampling day is derived from the date 
-#' of the measurements.  Multiple sampling events may occur within a sampling 
+#' defined by the event threshold.  Sampling day is derived from the date
+#' of the measurements.  Multiple sampling events may occur within a sampling
 #' day.
 #' @export
 #' @examples
 #' \dontrun{
-#' 
-#' ufp_batch_read(c(path1, path2, path3), event_threshold = 10, 
-#' tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE)
+#'
+#' ufp_batch_read(c(path1, path2, path3),
+#'   event_threshold = 10,
+#'   tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE
+#' )
 #' }
 ufp_batch_read <- function(paths, event_threshold = 10, tz = "America/New_York",
                            truncate_ufp = TRUE, coords = TRUE) {
   d_pufp <- map(paths, ~ ufp_read(.,
-                                       tz = tz, truncate_ufp = truncate_ufp, 
-                                       coords = coords
+    tz = tz, truncate_ufp = truncate_ufp,
+    coords = coords
   )) %>%
     reduce(., rbind) %>%
     arrange(Date_Time) %>%
