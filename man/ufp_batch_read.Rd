@@ -15,24 +15,24 @@ ufp_batch_read(
 \arguments{
 \item{paths}{a vector of paths}
 
-\item{event_threshold}{numeric; difftime value in minutes to differentiate 
-sampling events. Consecutive measurements that exceed this threshold are separated 
+\item{event_threshold}{numeric; difftime value in minutes to differentiate
+sampling events. Consecutive measurements that exceed this threshold are separated
 into new sampling events. Default = 10.}
 
-\item{tz}{a character string that specifies which time zone to parse the 
+\item{tz}{a character string that specifies which time zone to parse the
 date with. Default = "America/New_York."}
 
-\item{truncate_ufp}{logical; truncate UFP concentration? If TRUE 
+\item{truncate_ufp}{logical; truncate UFP concentration? If TRUE
 (the default), UFP concentrations above 250K will be right censored.}
 
-\item{coords}{logical; arse GPS string to derive latitude and longitude? 
+\item{coords}{logical; arse GPS string to derive latitude and longitude?
 Default = TRUE.}
 }
 \value{
-a tibble. Additional columns are created for "Sampling_Event" and 
+a tibble. Additional columns are created for "Sampling_Event" and
 "Sampling_Day."  Sampling events represent discreet intervals in sampling
-defined by the event threshold.  Sampling day is derived from the date 
-of the measurements.  Multiple sampling events may occur within a sampling 
+defined by the event threshold.  Sampling day is derived from the date
+of the measurements.  Multiple sampling events may occur within a sampling
 day.
 }
 \description{
@@ -41,7 +41,9 @@ Reads and cleans text file output from PUFP sensor.
 \examples{
 \dontrun{
 
-ufp_batch_read(c(path1, path2, path3), event_threshold = 10, 
-tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE)
+ufp_batch_read(c(path1, path2, path3),
+  event_threshold = 10,
+  tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE
+)
 }
 }

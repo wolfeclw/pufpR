@@ -18,28 +18,30 @@ ufp_batch_impute(
 \arguments{
 \item{df}{an object created by `ufp_batch_read()`.}
 
-\item{distance_threshold}{distance (meters) between the last known coordinates before 
-a GPS lapse and the first known coordinates after a lapse are compared to 
+\item{distance_threshold}{distance (meters) between the last known coordinates before
+a GPS lapse and the first known coordinates after a lapse are compared to
 this value.  If the distance exceeds this threshold, coordinates are not
 imputed. Default = 100.}
 
 \item{jitter_amount}{numeric; amount of jitter to apply to imputed coords.
 Default = 0.00001 decimal degrees. See \code{\link[sf]{st_jitter}}.}
 
-\item{show_lapse_distance}{NEEDS A DEF}
+\item{show_lapse_distance}{logical; If TRUE, a column will display the distance (meters)
+between the last known coordinate before a GPS lapse and first known coordinate 
+after a GPS lapse.  Default = FALSE.}
 
-\item{fill_open_lapses}{logical; impute missing coordinates at the 
-beginning and end of the data frame (i.e. lapses not enclosed by known 
+\item{fill_open_lapses}{logical; impute missing coordinates at the
+beginning and end of the data frame (i.e. lapses not enclosed by known
 coordinates). Default = FALSE.}
 
 \item{speed_threshold}{criteria to impute open lapses. If the median speed
-of cooridnates before or after an open lapse exceeds this threshold, 
+of cooridnates before or after an open lapse exceeds this threshold,
 coordinates are not imputed.  Default = 5 (m/s).}
 
-\item{speed_window}{numeric; number of rows used to calculate 
+\item{speed_window}{numeric; number of rows used to calculate
 "speed_threshold."}
 
-\item{open_lapse_length}{if the number of rows in an open lapse exceed this 
+\item{open_lapse_length}{if the number of rows in an open lapse exceed this
 threshold, coordinates are not imputed. Default = 600.}
 }
 \value{
@@ -54,7 +56,10 @@ event.
 \examples{
 \dontrun{
 
-ufp_batch_impute(df, distance_threshold = 100, jitter_amount = 0.00001, fill_open_lapses = FALSE,
-speed_threshold = 5, speed_window = 60, open_lapse_length = 600)
+ufp_batch_impute(df,
+  distance_threshold = 100, jitter_amount = 0.00001, show_lapse_distance = FALSE,
+  fill_open_lapses = FALSE, speed_threshold = 5, speed_window = 60, 
+  open_lapse_length = 600
+)
 }
 }

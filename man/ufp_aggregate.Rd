@@ -14,13 +14,13 @@ ufp_aggregate(
 \arguments{
 \item{df}{an object created by `ufp_read()` or `ufp_batch_read()`.}
 
-\item{unit}{a character string specifying a time unit or a multiple of a 
+\item{unit}{a character string specifying a time unit or a multiple of a
 unit to be rounded to. \code{\link[lubridate]{floor_date}}}
 
-\item{floor_or_celiling}{"floor" = `floor_date()`; 
+\item{floor_or_celiling}{"floor" = `floor_date()`;
 "ceiling" = `ceilig_date()`}
 
-\item{summary_fun}{summary function (i.e. "mean", "median"). 
+\item{summary_fun}{summary function (i.e. "mean", "median").
 Default = "median."}
 }
 \value{
@@ -32,7 +32,9 @@ Aggregate PUFP time series by specified time unit
 \examples{
 \dontrun{
 
-ufp_aggregate(df, unit = "5 seconds", floor_or_ceiling = "floor",
-summary_fun = "median")
+ufp_aggregate(df,
+  unit = "5 seconds", floor_or_ceiling = "floor",
+  summary_fun = "median"
+)
 }
 }

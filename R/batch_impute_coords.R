@@ -11,7 +11,9 @@
 #' imputed. Default = 100.
 #' @param jitter_amount numeric; amount of jitter to apply to imputed coords.
 #' Default = 0.00001 decimal degrees. See \code{\link[sf]{st_jitter}}.
-#' @param show_lapse_distance NEEDS A DEF
+#' @param show_lapse_distance logical; If TRUE, a column will display the distance (meters)
+#' between the last known coordinate before a GPS lapse and first known coordinate 
+#' after a GPS lapse.  Default = FALSE.
 #' @param fill_open_lapses logical; impute missing coordinates at the
 #' beginning and end of the data frame (i.e. lapses not enclosed by known
 #' coordinates). Default = FALSE.
@@ -31,8 +33,9 @@
 #' \dontrun{
 #'
 #' ufp_batch_impute(df,
-#'   distance_threshold = 100, jitter_amount = 0.00001, fill_open_lapses = FALSE,
-#'   speed_threshold = 5, speed_window = 60, open_lapse_length = 600
+#'   distance_threshold = 100, jitter_amount = 0.00001, show_lapse_distance = FALSE,
+#'   fill_open_lapses = FALSE, speed_threshold = 5, speed_window = 60, 
+#'   open_lapse_length = 600
 #' )
 #' }
 ufp_batch_impute <- function(df, distance_threshold = 100, jitter_amount = 0.00001, show_lapse_distance = FALSE,

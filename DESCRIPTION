@@ -1,5 +1,6 @@
 Package: pufpR
-Title: Personal Ultrafine Particle (PUFP) Sensor Data Cleaning and Analysis 
+Title: Personal Ultrafine Particle (PUFP) Sensor Data Cleaning
+    and Analysis
 Version: 0.0.1
 Authors@R: 
     person(given = "Chris",
@@ -9,22 +10,22 @@ Authors@R:
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
-Encoding: UTF-8
-LazyData: true
 Imports: 
+    circular,
     dplyr,
-    readr,
-    stringr,
-    lubridate,
-    purrr,
     geosphere,
     hms,
+    lubridate,
+    purrr,
+    readr,
     scales,
     sf,
-    zoo,
+    stringr,
+    tibble,
     tidyr,
-    circular,
-    tibble
-RoxygenNote: 7.1.0
+    zoo
 Suggests: 
     testthat
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.0

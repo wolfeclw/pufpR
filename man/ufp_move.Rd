@@ -10,12 +10,12 @@ ufp_move(df)
 \item{df}{data frame created by `ufp_read() `or `ufp_batch_read()`}
 }
 \value{
-a data frame.  Speed is expressed in meters per second; azimuth is 
+a data frame.  Speed is expressed in meters per second; azimuth is
 expressed in degrees.
 }
 \description{
 Calculates the speed and azimuth (bearing) of consecutive PUFP measurements.
-If multiple sampling events are included in the input file, 
+If multiple sampling events are included in the input file,
 speed and azimuth are calcuated by event.
 }
 \examples{

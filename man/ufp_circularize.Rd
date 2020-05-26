@@ -2,7 +2,7 @@
 % Please edit documentation in R/circularize.R
 \name{ufp_circularize}
 \alias{ufp_circularize}
-\title{Title}
+\title{Circular Variance and Clustering}
 \usage{
 ufp_circularize(
   df,
@@ -13,26 +13,33 @@ ufp_circularize(
 )
 }
 \arguments{
-\item{df}{NEED DEF}
+\item{df}{an object created by `ufp_move().` The input data frame must include
+'speed' and 'azimuth' before circular variance can be calcuated and clusters 
+can be identified.}
 
-\item{circvar_threshold}{NEED DEF}
+\item{circvar_threshold}{numeric; Threshold value to use to determine clustering.}
 
-\item{window}{NEED DEF}
+\item{window}{window (row) used to calculate circular variance.}
 
-\item{cluster_threshold}{NEED DEF}
+\item{cluster_threshold}{threshold value used to define the number of observations (rows)
+in each cluster.  If the number of points in a cluster is less than this value, 
+they will not be defined as a cluster.}
 
-\item{show_circvar}{NEED DEF}
+\item{show_circvar}{Show circular variance (`circvar`) within the specified 'window.'
+Default = 0.7.}
 }
 \value{
-NEED DEF
+a tibble.
 }
 \description{
-Title
+Calculate the circular variance of
 }
 \examples{
 \dontrun{
 
-ufp_circularize(df, circvar_threshold = .7, window = 60, cluster_threshold = NULL, 
-show_circvar = FALSE)
+ufp_circularize(df,
+  circvar_threshold = .7, window = 60, cluster_threshold = NULL,
+  show_circvar = FALSE
+)
 }
 }

@@ -9,13 +9,13 @@ ufp_read(path, tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE)
 \arguments{
 \item{path}{a path.}
 
-\item{tz}{a character string that specifies which time zone to parse the 
+\item{tz}{a character string that specifies which time zone to parse the
 date with. Default = "America/New_York."}
 
 \item{truncate_ufp}{truncate UFP concentration? If TRUE (the default), UFP
 concentrations above 250K will be right censored.}
 
-\item{coords}{parse GPS string to derive latitude and longitude? 
+\item{coords}{parse GPS string to derive latitude and longitude?
 Default = TRUE.}
 }
 \value{

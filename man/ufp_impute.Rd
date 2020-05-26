@@ -18,8 +18,8 @@ ufp_impute(
 \arguments{
 \item{df}{data frame created by `ufp_read()`.}
 
-\item{distance_threshold}{distance (meters) between the last known coordinates before 
-a GPS lapse and the first known coordinates after a lapse are compared to 
+\item{distance_threshold}{distance (meters) between the last known coordinates before
+a GPS lapse and the first known coordinates after a lapse are compared to
 this value.  If the distance exceeds this threshold, coordinates are not
 imputed. Default = 100.}
 
@@ -28,18 +28,18 @@ Default = 0.00001 decimal degrees. See \code{\link[sf]{st_jitter}}.}
 
 \item{show_lapse_distance}{NEEDS A DEF}
 
-\item{fill_open_lapses}{logical; impute missing coordinates at the 
-beginning and end of the data frame (i.e. lapses not enclosed by known 
+\item{fill_open_lapses}{logical; impute missing coordinates at the
+beginning and end of the data frame (i.e. lapses not enclosed by known
 coordinates). Default = FALSE.}
 
 \item{speed_threshold}{criteria to impute open lapses. If the median speed
-of cooridnates before or after an open lapse exceeds this threshold, 
+of cooridnates before or after an open lapse exceeds this threshold,
 coordinates are not imputed.  Default = 5 (m/s).}
 
-\item{speed_window}{numeric; number of rows used to calculate 
+\item{speed_window}{numeric; number of rows used to calculate
 "speed_threshold."}
 
-\item{open_lapse_length}{if the number of rows in an open lapse exceed this 
+\item{open_lapse_length}{if the number of rows in an open lapse exceed this
 threshold, coordinates are not imputed. Default = 600.}
 }
 \value{
@@ -53,7 +53,9 @@ Imputes missing lon/lat coordinates that occur during GPS lapses.
 \examples{
 \dontrun{
 
-ufp_impute(df, distance_threshold = 100, jitter_amount = 0.00001, fill_open_lapses = FALSE,
-speed_threshold = 5, speed_window = 60, open_lapse_length = 600)
+ufp_impute(df,
+  distance_threshold = 100, jitter_amount = 0.00001, fill_open_lapses = FALSE,
+  speed_threshold = 5, speed_window = 60, open_lapse_length = 600
+)
 }
 }

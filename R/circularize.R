@@ -1,14 +1,21 @@
+ 
 
-
-#' Title
+#'Circular Variance and Clustering
+#' 
+#' Calculate the circular variance of 
 #'
-#' @param df NEED DEF
-#' @param circvar_threshold NEED DEF
-#' @param window NEED DEF
-#' @param cluster_threshold NEED DEF
-#' @param show_circvar NEED DEF
+#' @param df an object created by `ufp_move().` The input data frame must include
+#' 'speed' and 'azimuth' before circular variance can be calcuated and clusters 
+#' can be identified.
+#' @param circvar_threshold numeric; Threshold value to use to determine clustering.
+#' @param window window (row) used to calculate circular variance.
+#' @param cluster_threshold threshold value used to define the number of observations (rows)
+#' in each cluster.  If the number of points in a cluster is less than this value, 
+#' they will not be defined as a cluster.
+#' @param show_circvar Show circular variance (`circvar`) within the specified 'window.'
+#' Default = 0.7.
 #'
-#' @return NEED DEF
+#' @return a tibble.
 #' @export
 #'
 #' @examples
