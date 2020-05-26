@@ -61,7 +61,7 @@ ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_thr
       d_places <- d_places %>%
         mutate(place_grp = ifelse(is.na(place_grp) & pl_distance < 100, zoo::na.locf(place_grp, na.rm = FALSE),
                                   place_grp))
-    } 
+    }
     
     d_clusters <- ufp_cluster(d_places, cluster_threshold = cluster_threshold)
     
@@ -87,9 +87,7 @@ ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_thr
     d_clusters <- d_clusters %>% select(-circvar)
   } else if (sum(is.na(df$lat)) == nrow(df)) {
     d_clusters <- d_clusters %>% mutate(circvar = NA,
-                         cluster_grp = NA)
+                                        cluster_grp = NA)
   }
   d_clusters
 }
-
-### REWRITE SO THAT SELECT ONLY EMOVES CIRCVAR NOT MOVEBREAK JUNK...PL DISTANCE
