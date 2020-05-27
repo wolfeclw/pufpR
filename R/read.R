@@ -19,6 +19,7 @@
 #' ufp_read(path, tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE)
 #' }
 #' @importFrom purrr map map_chr map_df map_dbl reduce
+#' @importFrom pkgcond suppress_conditions
 #' @import dplyr
 
 ufp_read <- function(path, tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE) {
