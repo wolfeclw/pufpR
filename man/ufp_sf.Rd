@@ -7,7 +7,8 @@
 ufp_sf(df)
 }
 \arguments{
-\item{df}{data frame created by `ufp_read() `or `ufp_batch_read()`}
+\item{df}{data frame created by `ufp_read() `or `ufp_batch_read()`.  The input
+data frame must include lon/lat coordinates.}
 }
 \value{
 a `MULTIPOINT` object

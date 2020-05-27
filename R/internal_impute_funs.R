@@ -14,7 +14,7 @@ impute_coords_dist <- function(df, distance_threshold = 100, jitter_amount = 0.0
     mutate(lapse = ifelse(is.na(lat), 1, 0)) %>%
     filter(lapse == 1)
 
-  if (nrow(d_lapse) > 0) {
+  if (nrow(d_lapse) > 0 & sum(!is.na(d_lapse$lat) == nrow(d_lapse))) {
     d_lapse <- d_lapse %>%
       mutate(
         lag_rownum = lag(r),
@@ -106,8 +106,9 @@ impute_coords_dist <- function(df, distance_threshold = 100, jitter_amount = 0.0
     ))
   } else {
     d_dist_imputed <- df %>%
-      mutate(imputed_coord = ifelse(!is.na(lat), 0, NA))
-    message("Coordinates were not imputed based on distance.  There are no lapses enclosed with GPS coordinates.")
+      mutate(lapse_distance = NA,
+             imputed_coord = ifelse(!is.na(lat), 0, NA))
+    message("GPS lapses were not imputed based on distance.  There are no lapses enclosed with GPS coordinates.")
   }
 
   if (show_lapse_distance == TRUE) {

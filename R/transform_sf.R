@@ -4,7 +4,8 @@
 #' Creates a multipoint sf object from a PUFP data frame created by `ufp_read()`
 #' or `ufp_batch_read()`. Points are projected using WGS84 (crs = 4326).
 #'
-#' @param df data frame created by `ufp_read() `or `ufp_batch_read()`
+#' @param df data frame created by `ufp_read() `or `ufp_batch_read()`.  The input
+#' data frame must include lon/lat coordinates.
 #'
 #' @return a `MULTIPOINT` object
 #' @export

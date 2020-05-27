@@ -2,7 +2,9 @@
 
 #'Circular Variance and Clustering
 #' 
-#' Calculate the circular variance of 
+#' Calculate the circular variance of PUFP measurements and geographic clustering.
+#' Imputing lon/lat using `ufp_impute()` or `batch_impute_coords()` is
+#' recommended if GPS coordinates are missing.
 #'
 #' @param df an object created by `ufp_move().` The input data frame must include
 #' 'speed' and 'azimuth' before circular variance can be calcuated and clusters 
@@ -53,8 +55,7 @@ ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_thr
       circvar = round(1 - r, digits = 1),
       roll_speed = zoo::rollmedian(speed_ms, 12, na.rm = TRUE, fill = NA, align = "center"),
       roll_speed = zoo::na.locf(roll_speed, na.rm = FALSE, maxgap = 12),
-      move_break = ifelse(circvar >= .7 & roll_speed < 2 |
-        circvar < .7 & roll_speed < .25, 1, 0),
+      move_break = ifelse(circvar >= .7 & roll_speed < 2, 1, 0),
       rw_num = row_number()
     ) %>%
     select(-c(a_rad:r, roll_speed))

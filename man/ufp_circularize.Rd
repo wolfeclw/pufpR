@@ -32,7 +32,9 @@ Default = 0.7.}
 a tibble.
 }
 \description{
-Calculate the circular variance of
+Calculate the circular variance of PUFP measurements and geographic clustering.
+Imputing lon/lat using `ufp_impute()` or `batch_impute_coords()` is
+recommended if GPS coordinates are missing.
 }
 \examples{
 \dontrun{
