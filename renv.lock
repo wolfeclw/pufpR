@@ -282,6 +282,13 @@
       "Repository": "CRAN",
       "Hash": "4c2692dda4c30c71209da02ebbfa0258"
     },
+    "pkgcond": {
+      "Package": "pkgcond",
+      "Version": "0.1.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "53e12f7023e53247091717ce3cadab2b"
+    },
     "pkgconfig": {
       "Package": "pkgconfig",
       "Version": "2.0.3",

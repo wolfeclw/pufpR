@@ -16,6 +16,7 @@ Imports:
     geosphere,
     hms,
     lubridate,
+    pkgcond,
     purrr,
     readr,
     scales,
