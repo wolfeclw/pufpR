@@ -37,14 +37,15 @@ impute_coords_dist <- function(df, distance_threshold = 100, jitter_amount = 0.0
     minus_coords <- d_row_vector$min_minus
     plus_coords <- d_row_vector$max_plus
 
-    dminus <- map_df(d_lapse_join, `[`, minus_coords)
-    dplus <- map_df(d_lapse_join, `[`, plus_coords)
+    dminus <- map_df(d_lapse_join, `[`, minus_coords) %>% select(lon, lat)
+    dplus <- map_df(d_lapse_join, `[`, plus_coords) %>% select(lon, lat)
 
-    lapse_coords_bind <- bind_cols(dminus, dplus)
+    lapse_coords_bind <- suppressMessages(bind_cols(dminus, dplus))
     lapse_coords_bind <- lapse_coords_bind %>%
       mutate(
         lapse_grp = row_number(),
-        lapse_distance = round(geosphere::distHaversine(cbind(lon, lat), cbind(lon1, lat1), r = 6378137),
+        lapse_distance = round(geosphere::distHaversine(cbind(lon...1, lat...2), cbind(lon...3, lat...4),
+                                                        r = 6378137),
           digits = 2
         )
       ) %>%
