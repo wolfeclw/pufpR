@@ -15,7 +15,7 @@ import_pufp <- function(path) {
     select(-na_col)
 }
 
-clean_pufp <- function(path, tz = "America/New_York", truncate_ufp = TRUE) {
+clean_pufp <- function(path, tz = "America/New_York", truncate_ufp = TRUE, ufp_check = TRUE) {
   d_cols <- import_pufp(path)
   d_cols$Date <- lubridate::mdy(d_cols$Date)
   d_cols$Date_Time <- lubridate::ymd_hms(paste(d_cols$Date, d_cols$Time), tz = tz)
@@ -24,7 +24,18 @@ clean_pufp <- function(path, tz = "America/New_York", truncate_ufp = TRUE) {
   if (truncate_ufp == TRUE) {
     d_cols$UFP_conc250 <- ifelse(d_cols$UFP_conc > 2.5e5, 2.5e5, d_cols$UFP_conc)
   }
-
+  
+  if (ufp_check == TRUE) {
+    d_cols <- d_cols %>% 
+      mutate(
+        UFP_NA = if_else(is.na(UFP_conc), 1, 0),
+        med_roll = zoo::rollmedian(UFP_conc, 31, fill = NA), 
+        new_med =  ifelse(is.na(med_roll), UFP_conc, med_roll),
+        LT_TEN = ifelse(new_med < 10, TRUE, FALSE),
+        UFP_Invalid = ifelse(UFP_NA == 1 | LT_TEN == TRUE, 1, 0)) %>% 
+      select(-c(med_roll, new_med, LT_TEN))
+  }
+  
   d_clean <- d_cols %>%
     mutate(gps_element_count = stringr::str_count(GPS_Signal, ",")) %>%
     filter(gps_element_count >= 5) %>%
@@ -35,8 +46,9 @@ clean_pufp <- function(path, tz = "America/New_York", truncate_ufp = TRUE) {
 }
 
 
-geo_pufp <- function(path, tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE) {
-  clean_df <- clean_pufp(path, tz = tz, truncate_ufp = truncate_ufp)
+geo_pufp <- function(path, tz = "America/New_York", truncate_ufp = TRUE, ufp_check = TRUE,
+                     coords = TRUE) {
+  clean_df <- clean_pufp(path, tz = tz, truncate_ufp = truncate_ufp, ufp_check = ufp_check)
 
   if (coords == FALSE) {
     geo_df <- clean_df
