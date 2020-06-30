@@ -2,21 +2,21 @@
 % Please edit documentation in R/move.R
 \name{ufp_move}
 \alias{ufp_move}
-\title{Calculate Speed and Azimuth of PUFP Measurements}
+\title{Calculate speed and azimuth of PUFP measurements}
 \usage{
 ufp_move(df)
 }
 \arguments{
-\item{df}{data frame created by `ufp_read() `or `ufp_batch_read()`}
+\item{df}{data frame created by \code{ufp_read() }or \code{ufp_batch_read()}}
 }
 \value{
 a data frame.  Speed is expressed in meters per second; azimuth is
 expressed in degrees.
 }
 \description{
-Calculates the speed and azimuth (bearing) of consecutive PUFP measurements.
-If multiple sampling events are included in the input file,
-speed and azimuth are calcuated by event.
+\code{ufp_move()} calculates the speed and azimuth (bearing) of consecutive PUFP
+measurements. If multiple sampling events are included in the input file, the
+data frame is grouped and speed and azimuth are calcuated by event.
 }
 \examples{
 \dontrun{

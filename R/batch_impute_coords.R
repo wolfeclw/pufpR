@@ -1,8 +1,8 @@
 
-#' Impute Missing GPS Data
+#' Impute missing GPS data on multiple files
 #'
-#' Imputes missing lon/lat coordinates that occur during GPS lapses by sampling
-#' event.
+#' `batch_impute_coords()` imputes missing lon/lat coordinates that occur during
+#' GPS lapses by sampling event.
 #'
 #' @param df an object created by `ufp_batch_read()`.
 #' @param distance_threshold distance (meters) between the last known coordinates before
@@ -25,8 +25,8 @@
 #' @param open_lapse_length if the number of rows in an open lapse exceed this
 #' threshold, coordinates are not imputed. Default = 600.
 #' @return a data frame.  A column is created to indicate whehter
-#' coordinates were imputed ("imputed_coord"). The function also creates an
-#' additional column stating the distance between lapses ("lapse_distance").
+#' coordinates were imputed ('imputed_coord'). The function also creates an
+#' additional column stating the distance between lapses ('lapse_distance').
 #' @export
 #'
 #' @examples

@@ -2,7 +2,7 @@
 % Please edit documentation in R/impute_coords.R
 \name{ufp_impute}
 \alias{ufp_impute}
-\title{Impute Missing GPS Data}
+\title{Impute missing GPS data}
 \usage{
 ufp_impute(
   df,
@@ -16,7 +16,7 @@ ufp_impute(
 )
 }
 \arguments{
-\item{df}{data frame created by `ufp_read()`.}
+\item{df}{data frame created by \code{ufp_read()}.}
 
 \item{distance_threshold}{distance (meters) between the last known coordinates before
 a GPS lapse and the first known coordinates after a lapse are compared to
@@ -37,18 +37,18 @@ of cooridnates before or after an open lapse exceeds this threshold,
 coordinates are not imputed.  Default = 5 (m/s).}
 
 \item{speed_window}{numeric; number of rows used to calculate
-"speed_threshold."}
+'speed_threshold.'}
 
 \item{open_lapse_length}{if the number of rows in an open lapse exceed this
 threshold, coordinates are not imputed. Default = 600.}
 }
 \value{
 a data frame.  An additional column is created to indicate whehter
-coordinates were imputed ("imputed_coord"). he function also creates an
-additional column stating the distance between lapses ("lapse_distance").
+coordinates were imputed ('imputed_coord'). he function also creates an
+additional column stating the distance between lapses ('lapse_distance').
 }
 \description{
-Imputes missing lon/lat coordinates that occur during GPS lapses.
+\code{ufp_impute()} imputes missing lon/lat coordinates that occur during GPS lapses.
 }
 \examples{
 \dontrun{

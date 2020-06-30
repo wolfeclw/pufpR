@@ -2,7 +2,7 @@
 % Please edit documentation in R/batch_read.R
 \name{ufp_batch_read}
 \alias{ufp_batch_read}
-\title{Read Multiple PUFP .txt Files}
+\title{Read multiple PUFP .txt files}
 \usage{
 ufp_batch_read(
   paths,
@@ -20,7 +20,7 @@ sampling events. Consecutive measurements that exceed this threshold are separat
 into new sampling events. Default = 10.}
 
 \item{tz}{a character string that specifies which time zone to parse the
-date with. Default = "America/New_York."}
+date with. Default = 'America/New_York.'}
 
 \item{truncate_ufp}{logical; truncate UFP concentration? If TRUE
 (the default), UFP concentrations above 250K will be right censored.}
@@ -29,14 +29,16 @@ date with. Default = "America/New_York."}
 Default = TRUE.}
 }
 \value{
-a tibble. Additional columns are created for "Sampling_Event" and
-"Sampling_Day."  Sampling events represent discreet intervals in sampling
-defined by the event threshold.  Sampling day is derived from the date
+a tibble. Additional columns are created for 'Sampling_Event' and
+'Sampling_Day.'  Sampling events represent discreet intervals in sampling
+defined by the \code{event_threshold}.  Sampling day is derived from the date
 of the measurements.  Multiple sampling events may occur within a sampling
 day.
 }
 \description{
-Reads and cleans text file output from PUFP sensor.
+\code{ufp_batch_read()} imports and cleans multiple PUFP text files as a single
+data frame.  Measurements from different monitoring sessions are denoted by
+the 'Sampling_Event' column, which is defined by \code{event_threshold}.
 }
 \examples{
 \dontrun{

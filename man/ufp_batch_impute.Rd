@@ -2,7 +2,7 @@
 % Please edit documentation in R/batch_impute_coords.R
 \name{ufp_batch_impute}
 \alias{ufp_batch_impute}
-\title{Impute Missing GPS Data}
+\title{Impute missing GPS data on multiple files}
 \usage{
 ufp_batch_impute(
   df,
@@ -16,7 +16,7 @@ ufp_batch_impute(
 )
 }
 \arguments{
-\item{df}{an object created by `ufp_batch_read()`.}
+\item{df}{an object created by \code{ufp_batch_read()}.}
 
 \item{distance_threshold}{distance (meters) between the last known coordinates before
 a GPS lapse and the first known coordinates after a lapse are compared to
@@ -27,7 +27,7 @@ imputed. Default = 100.}
 Default = 0.00001 decimal degrees. See \code{\link[sf]{st_jitter}}.}
 
 \item{show_lapse_distance}{logical; If TRUE, a column will display the distance (meters)
-between the last known coordinate before a GPS lapse and first known coordinate 
+between the last known coordinate before a GPS lapse and first known coordinate
 after a GPS lapse.  Default = FALSE.}
 
 \item{fill_open_lapses}{logical; impute missing coordinates at the
@@ -46,12 +46,12 @@ threshold, coordinates are not imputed. Default = 600.}
 }
 \value{
 a data frame.  A column is created to indicate whehter
-coordinates were imputed ("imputed_coord"). The function also creates an
-additional column stating the distance between lapses ("lapse_distance").
+coordinates were imputed ('imputed_coord'). The function also creates an
+additional column stating the distance between lapses ('lapse_distance').
 }
 \description{
-Imputes missing lon/lat coordinates that occur during GPS lapses by sampling
-event.
+\code{batch_impute_coords()} imputes missing lon/lat coordinates that occur during
+GPS lapses by sampling event.
 }
 \examples{
 \dontrun{

@@ -1,7 +1,7 @@
 
-#' Impute Missing GPS Data
+#' Impute missing GPS data
 #'
-#' Imputes missing lon/lat coordinates that occur during GPS lapses.
+#' `ufp_impute()` imputes missing lon/lat coordinates that occur during GPS lapses.
 #'
 #' @param df data frame created by `ufp_read()`.
 #' @param distance_threshold distance (meters) between the last known coordinates before
@@ -18,13 +18,13 @@
 #' of cooridnates before or after an open lapse exceeds this threshold,
 #' coordinates are not imputed.  Default = 5 (m/s).
 #' @param speed_window numeric; number of rows used to calculate
-#' "speed_threshold."
+#' 'speed_threshold.'
 #' @param open_lapse_length if the number of rows in an open lapse exceed this
 #' threshold, coordinates are not imputed. Default = 600.
 #'
 #' @return a data frame.  An additional column is created to indicate whehter
-#' coordinates were imputed ("imputed_coord"). he function also creates an
-#' additional column stating the distance between lapses ("lapse_distance").
+#' coordinates were imputed ('imputed_coord'). he function also creates an
+#' additional column stating the distance between lapses ('lapse_distance').
 #' @export
 #'
 #' @examples

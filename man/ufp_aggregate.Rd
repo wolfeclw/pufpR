@@ -2,7 +2,7 @@
 % Please edit documentation in R/aggregate.R
 \name{ufp_aggregate}
 \alias{ufp_aggregate}
-\title{Aggregate PUFP Time Series}
+\title{Aggregate PUFP data}
 \usage{
 ufp_aggregate(
   df,
@@ -12,29 +12,29 @@ ufp_aggregate(
 )
 }
 \arguments{
-\item{df}{an object created by `ufp_read()` or `ufp_batch_read()`.}
+\item{df}{an object created by \code{ufp_read()} or \code{ufp_batch_read()}.}
 
 \item{unit}{a character string specifying a time unit or a multiple of a
-unit to be rounded to. \code{\link[lubridate]{floor_date}}}
+unit to be rounded}
 
-\item{floor_or_celiling}{"floor" = `floor_date()`;
-"ceiling" = `ceilig_date()`}
+\item{floor_or_celiling}{either 'floor'(\code{\link[lubridate]{floor_date}})
+or 'ceiling'(\code{\link[lubridate]{ceiling_date}}). Default = 'floor.'}
 
-\item{summary_fun}{summary function (i.e. "mean", "median").
-Default = "median."}
+\item{summary_fun}{summary function (i.e. 'mean', 'median').
+Default = 'median.'}
 }
 \value{
 a tibble
 }
 \description{
-Aggregate PUFP time series by specified time unit
+\code{ufp_aggregate()} condenses PUFP time series data to a specified time unit.
 }
 \examples{
 \dontrun{
 
 ufp_aggregate(df,
-  unit = "5 seconds", floor_or_ceiling = "floor",
-  summary_fun = "median"
+  unit = '5 seconds', floor_or_ceiling = 'floor',
+  summary_fun = 'median'
 )
 }
 }

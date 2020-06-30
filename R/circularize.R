@@ -1,9 +1,10 @@
  
 
-#'Circular Variance and Clustering
+#'Calcute circular vairance and clustering 
 #' 
-#' Calculate the circular variance of PUFP measurements and geographic clustering.
-#' Imputing lon/lat using `ufp_impute()` or `batch_impute_coords()` is
+#' `ufp_circularize` calculates the circular variance of PUFP measurements and 
+#' includes arguements to define geographic clustering parameters. Imputing 
+#' lon/lat values using `ufp_impute()` or `batch_impute_coords()` is
 #' recommended if GPS coordinates are missing.
 #'
 #' @param df an object created by `ufp_move().` The input data frame must include

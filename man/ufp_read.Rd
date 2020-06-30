@@ -2,7 +2,7 @@
 % Please edit documentation in R/read.R
 \name{ufp_read}
 \alias{ufp_read}
-\title{Read PUFP .txt File}
+\title{Read PUFP .txt file}
 \usage{
 ufp_read(path, tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE)
 }
@@ -10,7 +10,7 @@ ufp_read(path, tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE)
 \item{path}{a path.}
 
 \item{tz}{a character string that specifies which time zone to parse the
-date with. Default = "America/New_York."}
+date with. Default = 'America/New_York.'}
 
 \item{truncate_ufp}{truncate UFP concentration? If TRUE (the default), UFP
 concentrations above 250K will be right censored.}
@@ -22,11 +22,11 @@ Default = TRUE.}
 a tibble.
 }
 \description{
-Reads and cleans text file output from PUFP sensor.
+\code{ufp_read()} imports and cleans a PUFP text file.
 }
 \examples{
 \dontrun{
 
-ufp_read(path, tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE)
+ufp_read(path, tz = 'America/New_York', truncate_ufp = TRUE, coords = TRUE)
 }
 }
