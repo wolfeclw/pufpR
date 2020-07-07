@@ -126,7 +126,8 @@ the 'Sampling_Event' column, which is defined by <code>event_threshold</code>.</
   event_threshold = <span class='fl'>10</span>,
   tz = <span class='st'>"America/New_York"</span>,
   truncate_ufp = <span class='fl'>TRUE</span>,
-  coords = <span class='fl'>TRUE</span>
+  coords = <span class='fl'>TRUE</span>,
+  ufp_check = <span class='fl'>FALSE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -156,6 +157,12 @@ date with. Default = 'America/New_York.'</p></td>
       <th>coords</th>
       <td><p>logical; arse GPS string to derive latitude and longitude?
 Default = TRUE.</p></td>
+    </tr>
+    <tr>
+      <th>ufp_check</th>
+      <td><p>check for invalid UFP measurements.  If TRUE, new columns
+named <code>UFP_NA</code> and <code>UFP_Invalid</code> are created to flag missing and potentially
+invalid UFP concentrations.</p></td>
     </tr>
     </table>
 
