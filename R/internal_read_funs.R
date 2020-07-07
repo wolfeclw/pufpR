@@ -46,7 +46,7 @@ clean_pufp <- function(path, tz = "America/New_York", truncate_ufp = TRUE, ufp_c
 }
 
 
-geo_pufp <- function(path, tz = "America/New_York", truncate_ufp = TRUE, ufp_check = TRUE,
+geo_pufp <- function(path, tz = "America/New_York", truncate_ufp = TRUE, ufp_check = FALSE,
                      coords = TRUE) {
   clean_df <- clean_pufp(path, tz = tz, truncate_ufp = truncate_ufp, ufp_check = ufp_check)
 

@@ -4,7 +4,13 @@
 \alias{ufp_read}
 \title{Read PUFP .txt file}
 \usage{
-ufp_read(path, tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE)
+ufp_read(
+  path,
+  tz = "America/New_York",
+  truncate_ufp = TRUE,
+  coords = TRUE,
+  ufp_check = FALSE
+)
 }
 \arguments{
 \item{path}{a path.}
@@ -17,6 +23,10 @@ concentrations above 250K will be right censored.}
 
 \item{coords}{parse GPS string to derive latitude and longitude?
 Default = TRUE.}
+
+\item{ufp_check}{check for invalid UFP measurements.  If TRUE, new columns
+named \code{UFP_NA} and \code{UFP_Invalid} are created to flag missing and potentially
+invalid UFP concentrations.}
 }
 \value{
 a tibble.
