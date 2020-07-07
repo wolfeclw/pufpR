@@ -15,7 +15,7 @@ import_pufp <- function(path) {
     select(-na_col)
 }
 
-clean_pufp <- function(path, tz = "America/New_York", truncate_ufp = TRUE, ufp_check = TRUE) {
+clean_pufp <- function(path, tz = "America/New_York", truncate_ufp = TRUE, ufp_check = FALSE) {
   d_cols <- import_pufp(path)
   d_cols$Date <- lubridate::mdy(d_cols$Date)
   d_cols$Date_Time <- lubridate::ymd_hms(paste(d_cols$Date, d_cols$Time), tz = tz)

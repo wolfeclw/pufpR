@@ -28,7 +28,7 @@
 ufp_read <- function(path, tz = 'America/New_York', truncate_ufp = TRUE, coords = TRUE,
                      ufp_check = FALSE) {
   pufp_df <- geo_pufp(path, tz = tz, truncate_ufp = truncate_ufp, coords = coords,
-                      ufp_check = FALSE)
+                      ufp_check = ufp_check)
 
   pufp_df
 }
