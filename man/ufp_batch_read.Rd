@@ -9,7 +9,8 @@ ufp_batch_read(
   event_threshold = 10,
   tz = "America/New_York",
   truncate_ufp = TRUE,
-  coords = TRUE
+  coords = TRUE,
+  ufp_check = FALSE
 )
 }
 \arguments{
@@ -27,6 +28,10 @@ date with. Default = 'America/New_York.'}
 
 \item{coords}{logical; arse GPS string to derive latitude and longitude?
 Default = TRUE.}
+
+\item{ufp_check}{check for invalid UFP measurements.  If TRUE, new columns
+named \code{UFP_NA} and \code{UFP_Invalid} are created to flag missing and potentially
+invalid UFP concentrations.}
 }
 \value{
 a tibble. Additional columns are created for 'Sampling_Event' and

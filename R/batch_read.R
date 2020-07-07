@@ -16,6 +16,9 @@
 #' (the default), UFP concentrations above 250K will be right censored.
 #' @param coords logical; arse GPS string to derive latitude and longitude?
 #' Default = TRUE.
+#' @param ufp_check check for invalid UFP measurements.  If TRUE, new columns
+#' named `UFP_NA` and `UFP_Invalid` are created to flag missing and potentially 
+#' invalid UFP concentrations. 
 #'
 #' @return a tibble. Additional columns are created for 'Sampling_Event' and
 #' 'Sampling_Day.'  Sampling events represent discreet intervals in sampling
@@ -32,10 +35,10 @@
 #' )
 #' }
 ufp_batch_read <- function(paths, event_threshold = 10, tz = "America/New_York",
-                           truncate_ufp = TRUE, coords = TRUE) {
+                           truncate_ufp = TRUE, coords = TRUE, ufp_check = FALSE) {
   d_pufp <- map(paths, ~ ufp_read(.,
     tz = tz, truncate_ufp = truncate_ufp,
-    coords = coords
+    coords = coords, ufp_check = ufp_check
   )) %>%
     reduce(., rbind) %>%
     arrange(Date_Time) %>%
