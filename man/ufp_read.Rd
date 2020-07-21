@@ -9,7 +9,10 @@ ufp_read(
   tz = "America/New_York",
   truncate_ufp = TRUE,
   coords = TRUE,
-  ufp_check = FALSE
+  ufp_check = FALSE,
+  participant_id = NULL,
+  sample_col = NULL,
+  sample_id = NULL
 )
 }
 \arguments{
@@ -37,6 +40,6 @@ a tibble.
 \examples{
 \dontrun{
 
-ufp_read(path, tz = 'America/New_York', truncate_ufp = TRUE, coords = TRUE)
+ufp_read(path, tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE)
 }
 }

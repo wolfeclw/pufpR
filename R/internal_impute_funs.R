@@ -45,8 +45,9 @@ impute_coords_dist <- function(df, distance_threshold = 100, jitter_amount = 0.0
       mutate(
         lapse_grp = row_number(),
         lapse_distance = round(geosphere::distHaversine(cbind(lon...1, lat...2), cbind(lon...3, lat...4),
-                                                        r = 6378137),
-          digits = 2
+          r = 6378137
+        ),
+        digits = 2
         )
       ) %>%
       select(lapse_grp, lapse_distance)
@@ -107,8 +108,10 @@ impute_coords_dist <- function(df, distance_threshold = 100, jitter_amount = 0.0
     ))
   } else {
     d_dist_imputed <- df %>%
-      mutate(lapse_distance = NA,
-             imputed_coord = ifelse(!is.na(lat), 0, NA))
+      mutate(
+        lapse_distance = NA,
+        imputed_coord = ifelse(!is.na(lat), 0, NA)
+      )
     message("GPS lapses were not imputed based on distance.  There are no lapses enclosed with GPS coordinates.")
   }
 

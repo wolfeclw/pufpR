@@ -1,7 +1,7 @@
 
 #' Calculate speed and azimuth of PUFP measurements
 #'
-#' `ufp_move()` calculates the speed and azimuth (bearing) of consecutive PUFP 
+#' `ufp_move()` calculates the speed and azimuth (bearing) of consecutive PUFP
 #' measurements. If multiple sampling events are included in the input file, the
 #' data frame is grouped and speed and azimuth are calcuated by event.
 #'

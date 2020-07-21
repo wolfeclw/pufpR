@@ -1,19 +1,19 @@
- 
 
-#'Calcute circular vairance and clustering 
-#' 
-#' `ufp_circularize` calculates the circular variance of PUFP measurements and 
-#' includes arguements to define geographic clustering parameters. Imputing 
+
+#' Calcute circular vairance and clustering
+#'
+#' `ufp_circularize` calculates the circular variance of PUFP measurements and
+#' includes arguements to define geographic clustering parameters. Imputing
 #' lon/lat values using `ufp_impute()` or `batch_impute_coords()` is
 #' recommended if GPS coordinates are missing.
 #'
 #' @param df an object created by `ufp_move().` The input data frame must include
-#' 'speed' and 'azimuth' before circular variance can be calcuated and clusters 
+#' 'speed' and 'azimuth' before circular variance can be calcuated and clusters
 #' can be identified.
 #' @param circvar_threshold numeric; Threshold value to use to determine clustering.
 #' @param window window (row) used to calculate circular variance.
 #' @param cluster_threshold threshold value used to define the number of observations (rows)
-#' in each cluster.  If the number of points in a cluster is less than this value, 
+#' in each cluster.  If the number of points in a cluster is less than this value,
 #' they will not be defined as a cluster.
 #' @param show_circvar Show circular variance (`circvar`) within the specified 'window.'
 #' Default = 0.7.

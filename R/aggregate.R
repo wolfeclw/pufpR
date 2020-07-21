@@ -5,7 +5,7 @@
 #'
 #' @param df an object created by `ufp_read()` or `ufp_batch_read()`.
 #' @param unit a character string specifying a time unit or a multiple of a
-#' unit to be rounded 
+#' unit to be rounded
 #' @param floor_or_celiling either 'floor'(\code{\link[lubridate]{floor_date}})
 #' or 'ceiling'(\code{\link[lubridate]{ceiling_date}}). Default = 'floor.'
 #' @param summary_fun summary function (i.e. 'mean', 'median').
@@ -18,18 +18,18 @@
 #' \dontrun{
 #'
 #' ufp_aggregate(df,
-#'   unit = '5 seconds', floor_or_ceiling = 'floor',
-#'   summary_fun = 'median'
+#'   unit = "5 seconds", floor_or_ceiling = "floor",
+#'   summary_fun = "median"
 #' )
 #' }
 #' @importFrom stats median
-ufp_aggregate <- function(df, unit = '5 seconds', floor_or_celiling = 'floor',
-                          summary_fun = 'median') {
-  if (sum(stringr::str_detect(names(df), 'Date_Time')) == 0) {
-    stop('`Date_Time` column not found.')
+ufp_aggregate <- function(df, unit = "5 seconds", floor_or_celiling = "floor",
+                          summary_fun = "median") {
+  if (sum(stringr::str_detect(names(df), "Date_Time")) == 0) {
+    stop("`Date_Time` column not found.")
   }
 
-  if (floor_or_celiling == 'floor') {
+  if (floor_or_celiling == "floor") {
     d_agg <- df %>%
       mutate(agg_dt = lubridate::floor_date(Date_Time, unit = unit)) %>%
       group_by(agg_dt) %>%
@@ -56,19 +56,19 @@ ufp_aggregate <- function(df, unit = '5 seconds', floor_or_celiling = 'floor',
   }
 
   char_cols <- select_if(df, is.character) %>% names()
-  rm_cols <- char_cols[!stringr::str_detect(char_cols, 'Sensor')]
+  rm_cols <- char_cols[!stringr::str_detect(char_cols, "Sensor")]
 
   if (length(rm_cols > 0)) {
     message(
-      "Columns `", paste(rm_cols, collapse = ', '),
+      "Columns `", paste(rm_cols, collapse = ", "),
       "` are of class 'character' and were removed during aggregation."
     )
   }
 
-  if (sum(stringr::str_detect(char_cols, 'Sensor')) == 1) {
+  if (sum(stringr::str_detect(char_cols, "Sensor")) == 1) {
     d_agg %>%
       mutate(Sensor = unique(df$Sensor)) %>%
-      select(Date_Time:Time, starts_with('UFP'), Sensor, everything())
+      select(Date_Time:Time, starts_with("UFP"), Sensor, everything())
   } else {
     d_agg
   }

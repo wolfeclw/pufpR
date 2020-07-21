@@ -10,7 +10,10 @@ ufp_batch_read(
   tz = "America/New_York",
   truncate_ufp = TRUE,
   coords = TRUE,
-  ufp_check = FALSE
+  ufp_check = FALSE,
+  articipant_id = NULL,
+  sample_col = NULL,
+  sample_id = NULL
 )
 }
 \arguments{

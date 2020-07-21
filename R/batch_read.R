@@ -2,8 +2,8 @@
 
 #' Read multiple PUFP .txt files
 #'
-#' `ufp_batch_read()` imports and cleans multiple PUFP text files as a single 
-#' data frame.  Measurements from different monitoring sessions are denoted by 
+#' `ufp_batch_read()` imports and cleans multiple PUFP text files as a single
+#' data frame.  Measurements from different monitoring sessions are denoted by
 #' the 'Sampling_Event' column, which is defined by `event_threshold`.
 #'
 #' @param paths a vector of paths
@@ -17,8 +17,8 @@
 #' @param coords logical; arse GPS string to derive latitude and longitude?
 #' Default = TRUE.
 #' @param ufp_check check for invalid UFP measurements.  If TRUE, new columns
-#' named `UFP_NA` and `UFP_Invalid` are created to flag missing and potentially 
-#' invalid UFP concentrations. 
+#' named `UFP_NA` and `UFP_Invalid` are created to flag missing and potentially
+#' invalid UFP concentrations.
 #'
 #' @return a tibble. Additional columns are created for 'Sampling_Event' and
 #' 'Sampling_Day.'  Sampling events represent discreet intervals in sampling
@@ -35,10 +35,14 @@
 #' )
 #' }
 ufp_batch_read <- function(paths, event_threshold = 10, tz = "America/New_York",
-                           truncate_ufp = TRUE, coords = TRUE, ufp_check = FALSE) {
+                           truncate_ufp = TRUE, coords = TRUE, ufp_check = FALSE,
+                           articipant_id = NULL, sample_col = NULL,
+                           sample_id = NULL) {
   d_pufp <- map(paths, ~ ufp_read(.,
     tz = tz, truncate_ufp = truncate_ufp,
-    coords = coords, ufp_check = ufp_check
+    coords = coords, ufp_check = ufp_check,
+    participant_id = participant_id,
+    sample_col = sample_col, sample_id = sample_id
   )) %>%
     reduce(., rbind) %>%
     arrange(Date_Time) %>%

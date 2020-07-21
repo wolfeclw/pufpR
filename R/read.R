@@ -11,24 +11,27 @@
 #' @param coords parse GPS string to derive latitude and longitude?
 #' Default = TRUE.
 #' @param ufp_check check for invalid UFP measurements.  If TRUE, new columns
-#' named `UFP_NA` and `UFP_Invalid` are created to flag missing and potentially 
-#' invalid UFP concentrations.  
+#' named `UFP_NA` and `UFP_Invalid` are created to flag missing and potentially
+#' invalid UFP concentrations.
 #' @return a tibble.
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #'
-#' ufp_read(path, tz = 'America/New_York', truncate_ufp = TRUE, coords = TRUE)
+#' ufp_read(path, tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE)
 #' }
 #' @importFrom purrr map map_chr map_df map_dbl reduce
 #' @importFrom pkgcond suppress_conditions
 #' @import dplyr
 
-ufp_read <- function(path, tz = 'America/New_York', truncate_ufp = TRUE, coords = TRUE,
-                     ufp_check = FALSE) {
-  pufp_df <- geo_pufp(path, tz = tz, truncate_ufp = truncate_ufp, coords = coords,
-                      ufp_check = ufp_check)
-
+ufp_read <- function(path, tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE,
+                     ufp_check = FALSE, participant_id = NULL, sample_col = NULL,
+                     sample_id = NULL) {
+  pufp_df <- tag_pufp(path,
+    tz = tz, truncate_ufp = truncate_ufp, coords = coords,
+    ufp_check = ufp_check, participant_id = participant_id,
+    sample_col = sample_col, sample_id = sample_id
+  )
   pufp_df
 }

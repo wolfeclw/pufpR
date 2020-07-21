@@ -16,7 +16,6 @@
 #' ufp_sf(df)
 #' }
 #' #' @import lwgeom
-
 ufp_sf <- function(df) {
   if (is.data.frame(df) == FALSE) {
     stop("The input object is not a data frame.  Did you import data using the `ufp_read()` or `ufp_batch_read()` function?")

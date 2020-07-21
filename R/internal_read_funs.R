@@ -1,6 +1,9 @@
 
 ###### INTERNAL READ FUNCTIONS #####
 
+
+## import .txt file
+
 import_pufp <- function(path) {
   options(warn = -1)
   d <- pkgcond::suppress_conditions(readr::read_tsv(path,
@@ -15,6 +18,9 @@ import_pufp <- function(path) {
     select(-na_col)
 }
 
+
+## truncate UFP values and check validity
+
 clean_pufp <- function(path, tz = "America/New_York", truncate_ufp = TRUE, ufp_check = FALSE) {
   d_cols <- import_pufp(path)
   d_cols$Date <- lubridate::mdy(d_cols$Date)
@@ -24,18 +30,19 @@ clean_pufp <- function(path, tz = "America/New_York", truncate_ufp = TRUE, ufp_c
   if (truncate_ufp == TRUE) {
     d_cols$UFP_conc250 <- ifelse(d_cols$UFP_conc > 2.5e5, 2.5e5, d_cols$UFP_conc)
   }
-  
+
   if (ufp_check == TRUE) {
-    d_cols <- d_cols %>% 
+    d_cols <- d_cols %>%
       mutate(
         UFP_NA = if_else(is.na(UFP_conc), 1, 0),
-        med_roll = zoo::rollmedian(UFP_conc, 31, fill = NA), 
-        new_med =  ifelse(is.na(med_roll), UFP_conc, med_roll),
+        med_roll = zoo::rollmedian(UFP_conc, 31, fill = NA),
+        new_med = ifelse(is.na(med_roll), UFP_conc, med_roll),
         LT_TEN = ifelse(new_med < 10, TRUE, FALSE),
-        UFP_Invalid = ifelse(UFP_NA == 1 | LT_TEN == TRUE, 1, 0)) %>% 
+        UFP_Valid = ifelse(UFP_NA == 1 | LT_TEN == TRUE, 0, 1)
+      ) %>%
       select(-c(med_roll, new_med, LT_TEN))
   }
-  
+
   d_clean <- d_cols %>%
     mutate(gps_element_count = stringr::str_count(GPS_Signal, ",")) %>%
     filter(gps_element_count >= 5) %>%
@@ -45,6 +52,8 @@ clean_pufp <- function(path, tz = "America/New_York", truncate_ufp = TRUE, ufp_c
   d_clean
 }
 
+
+## parse GPS signal to lon/lat coordinates
 
 geo_pufp <- function(path, tz = "America/New_York", truncate_ufp = TRUE, ufp_check = FALSE,
                      coords = TRUE) {
@@ -81,4 +90,26 @@ geo_pufp <- function(path, tz = "America/New_York", truncate_ufp = TRUE, ufp_che
     ))
   }
   geo_df
+}
+
+
+## tag UFP file with sampling session info
+
+tag_pufp <- function(path, tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE,
+                     ufp_check = FALSE, participant_id = NULL, sample_col = NULL,
+                     sample_id = NULL) {
+  geo_df <- geo_pufp(path,
+    tz = tz, truncate_ufp = truncate_ufp, coords = coords,
+    ufp_check = ufp_check
+  )
+
+  if (sum(is.null(sample_col), is.null(sample_id) == 0)) {
+    tag_df <- mutate(tag_df, sample_col = sample_id) %>%
+      relocate(sample_col)
+  }
+
+  if (!is.null(participant_id)) {
+    tag_df <- mutate(geo_df, ID = participant_id) %>%
+      relocate(participant_id)
+  }
 }
