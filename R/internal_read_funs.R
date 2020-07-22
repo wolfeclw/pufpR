@@ -102,18 +102,20 @@ tag_pufp <- function(path, tz = "America/New_York", truncate_ufp = TRUE, coords 
     tz = tz, truncate_ufp = truncate_ufp, coords = coords,
     ufp_check = ufp_check
   )
-  
+
   if (!is.null(sample_col) & !is.character(sample_col)) {
     stop("`sample_col` must be a character string.",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 
-  if (sum(is.null(sample_col), is.null(sample_id) == 1)) {
+  if (sum(is.null(sample_col), is.null(sample_id)) == 1) {
     stop("Both `sample_col` and `sample_id` must be assigned a value, not one or the other.",
-         call. = FALSE)
-  } else if (sum(is.null(sample_col), is.null(sample_id) == 0)) {
-    tag_df <- mutate(geo_df, {{sample_col}} := sample_id) %>% 
-      relocate({{sample_col}})
+      call. = FALSE
+    )
+  } else if (sum(is.null(sample_col), is.null(sample_id)) == 0) {
+    tag_df <- mutate(geo_df, {{ sample_col }} := sample_id) %>%
+      relocate({{ sample_col }})
   } else {
     tag_df <- geo_df
   }
@@ -124,6 +126,3 @@ tag_pufp <- function(path, tz = "America/New_York", truncate_ufp = TRUE, coords 
   }
   tag_df
 }
-
-
-
