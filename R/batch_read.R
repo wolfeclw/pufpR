@@ -19,7 +19,7 @@
 #' @param ufp_check check for invalid UFP measurements.  If TRUE, new columns
 #' named `UFP_NA` and `UFP_Invalid` are created to flag missing and potentially
 #' invalid UFP concentrations.
-#' #' @param participant_id  user defined string to denote a personal identifier.
+#' @param participant_id  user defined string to denote a personal identifier.
 #' This is useful if the PUFP is deployed during personal sampling.  If specified,
 #' a new column is created ('ID'). Default is NULL.
 #' @param sample_col user defined character string specifying the name of the
@@ -64,7 +64,7 @@ ufp_batch_read <- function(paths, event_threshold = 10, tz = "America/New_York",
     ) %>%
     select(Date_Time:Time, Sampling_Day, Sampling_Event, everything()) %>%
     select(-c(lag_time, Time_Diff.sec, break_yn))
-  
+
   if (!is.null(sample_col)) {
     d_pufp <- relocate(d_pufp, {{ sample_col }})
   }

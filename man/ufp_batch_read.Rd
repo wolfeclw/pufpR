@@ -34,8 +34,9 @@ Default = TRUE.}
 
 \item{ufp_check}{check for invalid UFP measurements.  If TRUE, new columns
 named \code{UFP_NA} and \code{UFP_Invalid} are created to flag missing and potentially
-invalid UFP concentrations.
-#' @param participant_id  user defined string to denote a personal identifier.
+invalid UFP concentrations.}
+
+\item{participant_id}{user defined string to denote a personal identifier.
 This is useful if the PUFP is deployed during personal sampling.  If specified,
 a new column is created ('ID'). Default is NULL.}
 
