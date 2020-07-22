@@ -19,7 +19,13 @@
 #' @param ufp_check check for invalid UFP measurements.  If TRUE, new columns
 #' named `UFP_NA` and `UFP_Invalid` are created to flag missing and potentially
 #' invalid UFP concentrations.
-#'
+#' #' @param participant_id  user defined string to denote a personal identifier. 
+#' This is useful if the PUFP is deployed during personal sampling.  If specified, 
+#' a new column is created ('ID'). Default is NULL.
+#' @param sample_col user defined character string specifying the name of the 
+#' column to denote sample ID. Default is NULL.
+#' @param sample_id user defined string to denote sample ID. If assigned, a 
+#' value must also be supplied to `sample_col`. Default is NULL.
 #' @return a tibble. Additional columns are created for 'Sampling_Event' and
 #' 'Sampling_Day.'  Sampling events represent discreet intervals in sampling
 #' defined by the `event_threshold`.  Sampling day is derived from the date
@@ -31,12 +37,13 @@
 #'
 #' ufp_batch_read(c(path1, path2, path3),
 #'   event_threshold = 10,
-#'   tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE
+#'   tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE, ufp_check = FALSE,
+#'   participant_id = NULL, sample_col = NULL, sample_id = NULL
 #' )
 #' }
 ufp_batch_read <- function(paths, event_threshold = 10, tz = "America/New_York",
                            truncate_ufp = TRUE, coords = TRUE, ufp_check = FALSE,
-                           articipant_id = NULL, sample_col = NULL,
+                           participant_id = NULL, sample_col = NULL,
                            sample_id = NULL) {
   d_pufp <- map(paths, ~ ufp_read(.,
     tz = tz, truncate_ufp = truncate_ufp,

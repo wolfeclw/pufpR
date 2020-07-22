@@ -11,7 +11,7 @@ ufp_batch_read(
   truncate_ufp = TRUE,
   coords = TRUE,
   ufp_check = FALSE,
-  articipant_id = NULL,
+  participant_id = NULL,
   sample_col = NULL,
   sample_id = NULL
 )
@@ -34,7 +34,16 @@ Default = TRUE.}
 
 \item{ufp_check}{check for invalid UFP measurements.  If TRUE, new columns
 named \code{UFP_NA} and \code{UFP_Invalid} are created to flag missing and potentially
-invalid UFP concentrations.}
+invalid UFP concentrations.
+#' @param participant_id  user defined string to denote a personal identifier.
+This is useful if the PUFP is deployed during personal sampling.  If specified,
+a new column is created ('ID'). Default is NULL.}
+
+\item{sample_col}{user defined character string specifying the name of the
+column to denote sample ID. Default is NULL.}
+
+\item{sample_id}{user defined string to denote sample ID. If assigned, a
+value must also be supplied to \code{sample_col}. Default is NULL.}
 }
 \value{
 a tibble. Additional columns are created for 'Sampling_Event' and
@@ -53,7 +62,8 @@ the 'Sampling_Event' column, which is defined by \code{event_threshold}.
 
 ufp_batch_read(c(path1, path2, path3),
   event_threshold = 10,
-  tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE
+  tz = "America/New_York", truncate_ufp = TRUE, coords = TRUE, ufp_check = FALSE,
+  participant_id = NULL, sample_col = NULL, sample_id = NULL
 )
 }
 }
