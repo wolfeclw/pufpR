@@ -79,7 +79,7 @@ ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_thr
   d_break <- d_variance %>%
     mutate(roll_speed = rspeed_minute(speed_ms),
            roll_speed = zoo::na.locf(roll_speed, na.rm = FALSE, maxgap = 12),
-           move_break = ifelse(circvar >= .7 & roll_speed < 2, 1, 0),
+           move_break = ifelse(circvar >= .7 & roll_speed <= 2, 1, 0),
            rw_num = row_number()) %>%
     select(-c(a_rad:r, roll_speed))
   
