@@ -41,6 +41,16 @@ ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_thr
     d <- df
   }
   dt_diff <- d$Date_Time - lag(d$Date_Time)
+  
+  time_unit <- floor(median(diff(d$Date_Time)))
+  units(time_unit) <- 'secs'
+  time_unit <- as.numeric(time_unit)
+  
+  if(time_unit > 60) {
+    stop('The `Date_Time` interval is greater than 60 seconds. Reduce the time unit when aggregating (5 seconds is recommended).',
+         call. = FALSE)
+  }
+  
   d_variance <- d %>%
     mutate(
       a_rad = circular::rad(azimuth),
@@ -53,16 +63,28 @@ ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_thr
       a_y2 = (sum_sin / window)^2,
       a_x2 = (sum_cos / window)^2,
       r = ifelse(is.na(lat), NA, sqrt(a_y2 + a_x2)),
-      circvar = round(1 - r, digits = 1),
-      roll_speed = zoo::rollmedian(speed_ms, 12, na.rm = TRUE, fill = NA, align = "center"),
-      roll_speed = zoo::na.locf(roll_speed, na.rm = FALSE, maxgap = 12),
-      move_break = ifelse(circvar >= .7 & roll_speed < 2, 1, 0),
-      rw_num = row_number()
-    ) %>%
+      circvar = round(1 - r, digits = 1))
+  
+  rspeed_minute <- function(x) {
+    
+    s_window <- 60/time_unit
+    
+    if (sum(is.na(x)) > 0) {
+      zoo::rollmedian(x, s_window, na.rm = TRUE, fill = NA, align = "center")
+    } else {
+      zoo::rollmedian(x, s_window, fill = NA, align = "center")
+    }
+  }
+  
+  d_break <- d_variance %>%
+    mutate(roll_speed = rspeed_minute(speed_ms),
+           roll_speed = zoo::na.locf(roll_speed, na.rm = FALSE, maxgap = 12),
+           move_break = ifelse(circvar >= .7 & roll_speed < 2, 1, 0),
+           rw_num = row_number()) %>%
     select(-c(a_rad:r, roll_speed))
-
-  if (sum(d_variance$move_break, na.rm = TRUE) > 0) {
-    d_places <- ufp_places(d_variance)
+  
+  if (sum(d_break$move_break, na.rm = TRUE) > 0) {
+    d_places <- ufp_places(d_break)
     d_places$clustered_coord <- ifelse(is.na(d_places$place_grp), 0, 1)
 
     d_places <- d_places %>%
@@ -84,8 +106,8 @@ ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_thr
         na.rm = FALSE, maxgap = window / 2
       )
     }
-  } else if (sum(!is.na(df$lat) > 0) & sum(d_variance$move_break, na.rm = TRUE) == 0) {
-    d_clusters <- d_variance %>%
+  } else if (sum(!is.na(df$lat) > 0) & sum(d_break$move_break, na.rm = TRUE) == 0) {
+    d_clusters <- d_break %>%
       select(-c(move_break, rw_num)) %>%
       mutate(cluster_grp = NA)
     message(paste0(

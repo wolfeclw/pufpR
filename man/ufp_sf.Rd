@@ -22,5 +22,4 @@ or \code{ufp_batch_read()}. Points are projected using WGS84 (crs = 4326).
 
 ufp_sf(df)
 }
-#' @import lwgeom
 }
