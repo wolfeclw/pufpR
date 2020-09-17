@@ -57,7 +57,7 @@ ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_thr
       a_sin = sin(a_rad),
       a_cos = cos(a_rad),
       sum_sin = zoo::rollsum(a_sin, window, na.rm = TRUE, fill = NA, align = "center"),
-      sum_sin = zoo::na.locf(sum_sin, na.rm = FALSE, maxgap = window),
+      sum_sin = zoo::na.locf(sum_sin, na.rm = FALSE, maxgap = window / 2),
       sum_cos = zoo::rollsum(a_cos, window, na.rm = TRUE, fill = NA, align = "center"),
       sum_cos = zoo::na.locf(sum_cos, na.rm = FALSE, maxgap = window / 2),
       a_y2 = (sum_sin / window)^2,
