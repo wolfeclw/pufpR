@@ -22,7 +22,8 @@
 #'   summary_fun = "median"
 #' )
 #' }
-#' @importFrom stats median
+#' @importFrom stats median 
+#' @importFrom purrr map map_chr map_lgl
 ufp_aggregate <- function(df, unit = "5 seconds", floor_or_celiling = "floor",
                           summary_fun = "median") {
   if (sum(stringr::str_detect(names(df), "Date_Time")) == 0) {
@@ -55,8 +56,14 @@ ufp_aggregate <- function(df, unit = "5 seconds", floor_or_celiling = "floor",
       select(Date_Time, Date, Time, everything())
   }
 
-  char_cols <- select_if(df, is.character) %>% names()
-  rm_cols <- char_cols[!stringr::str_detect(char_cols, "Sensor")]
+  char_cols <- select_if(df, is.character) 
+  char_lgl <- char_cols %>%
+    map(., unique) %>%
+    map_chr(., length) %>%
+    map_lgl(., ~. == 1)
+
+  char_keep <- char_cols[char_lgl][1:nrow(d_agg), ]
+  rm_cols <- char_cols[!char_lgl] %>% names()
 
   if (length(rm_cols > 0)) {
     message(
@@ -65,11 +72,8 @@ ufp_aggregate <- function(df, unit = "5 seconds", floor_or_celiling = "floor",
     )
   }
 
-  if (sum(stringr::str_detect(char_cols, "Sensor")) == 1) {
-    d_agg %>%
-      mutate(Sensor = unique(df$Sensor)) %>%
-      select(Date_Time:Time, starts_with("UFP"), Sensor, everything())
-  } else {
-    d_agg
-  }
+  d_agg_char <- bind_cols(char_keep, d_agg)
+  d_agg_char <- relocate(d_agg_char, Sensor, .after = last_col())
+
+  d_agg_char
 }
