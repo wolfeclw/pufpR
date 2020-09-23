@@ -107,25 +107,28 @@ ufp_cluster <- function(df, cluster_threshold = NULL) {
       stop("Invalid 'type' of argument 'cluster_threshold.' Expecting a numeric value.", call. = FALSE)
     }
 
-    d_clust <- clust_join %>%
+    dc <- clust_join %>%
       group_by(cluster_grp) %>%
       mutate(cluster_nrow = ifelse(is.na(cluster_grp), NA, n())) %>%
       ungroup()
 
-    clust_n <- d_clust %>%
+    clust_n <- dc %>%
       group_by(cluster_nrow) %>%
       summarise(n_max = max(cluster_nrow)) %>%
       tidyr::drop_na() %>%
       .$n_max
 
     rm_clust <- sum(clust_n < cluster_threshold)
-
-    d_clust[!is.na(d_clust$cluster_nrow) & d_clust$cluster_nrow < cluster_threshold, "place_grp"] <- NA
+    
+    d_clust <- dc %>% select(-c(move_break, rw_num, place_grp, place_lapse_grp, pl_distance, cluster_nrow))
 
     if (rm_clust > 0) {
-      d_clust <- d_clust[, !grepl("cluster_grp", colnames(d_clust))]
+      
+      dc[!is.na(dc$cluster_nrow) & dc$cluster_nrow < cluster_threshold, "place_grp"] <- NA
+      
+      dc_rm <- dc[, !grepl("cluster_grp", colnames(dc))]
 
-      reorder_clust <- d_clust %>%
+      reorder_clust <- dc_rm %>%
         filter(!is.na(place_grp)) %>%
         mutate(
           lag_rownum = lag(rw_num),
@@ -135,7 +138,7 @@ ufp_cluster <- function(df, cluster_threshold = NULL) {
         ) %>%
         select(-c(clust_break, lag_rownum, rw_diff, clust_break))
 
-      d_clust <- suppressMessages(full_join(d_clust, reorder_clust))
+      d_clust <- suppressMessages(full_join(dc_rm, reorder_clust))
       d_clust <- d_clust %>%
         select(-c(move_break, rw_num, place_lapse_grp, place_grp, clustered_coord, pl_distance, cluster_nrow))
 
