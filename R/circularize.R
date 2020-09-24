@@ -80,8 +80,10 @@ ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_thr
     mutate(roll_speed = rspeed_minute(speed_ms),
            roll_speed = zoo::na.locf(roll_speed, na.rm = FALSE, maxgap = 12),
            move_break = ifelse(circvar >= .7 & roll_speed <= 2, 1, 0),
-           rw_num = row_number()) %>%
-    select(-c(a_rad:r, roll_speed))
+           rw_num = row_number()) 
+  
+  # %>%
+  #   select(-c(a_rad:r, roll_speed))
   
   if (sum(d_break$move_break, na.rm = TRUE) > 0) {
     d_places <- ufp_places(d_break)
@@ -101,10 +103,8 @@ ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_thr
     d_clusters <- ufp_cluster(d_places, cluster_threshold = cluster_threshold)
 
     if (is.na(d_clusters$cluster_grp[window / 2 - 1])) {
-      d_clusters$cluster_grp <- zoo::na.locf(d_clusters$cluster_grp,
-        fromLast = TRUE,
-        na.rm = FALSE, maxgap = window / 2
-      )
+      c_grp1 <- d_clusters$cluster_grp[window/2]
+      d_clusters$cluster_grp[1:(window/2 - 1)] <- c_grp1
     }
   } else if (sum(!is.na(df$lat) > 0) & sum(d_break$move_break, na.rm = TRUE) == 0) {
     d_clusters <- d_break %>%
