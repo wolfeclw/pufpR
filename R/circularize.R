@@ -80,10 +80,8 @@ ufp_circularize <- function(df, circvar_threshold = .7, window = 60, cluster_thr
     mutate(roll_speed = rspeed_minute(speed_ms),
            roll_speed = zoo::na.locf(roll_speed, na.rm = FALSE, maxgap = 12),
            move_break = ifelse(circvar >= .7 & roll_speed <= 2, 1, 0),
-           rw_num = row_number()) 
-  
-  # %>%
-  #   select(-c(a_rad:r, roll_speed))
+           rw_num = row_number()) %>%
+    select(-c(a_rad:r, roll_speed))
   
   if (sum(d_break$move_break, na.rm = TRUE) > 0) {
     d_places <- ufp_places(d_break)
