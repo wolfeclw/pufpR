@@ -25,10 +25,10 @@
     },
     "KernSmooth": {
       "Package": "KernSmooth",
-      "Version": "2.23-18",
+      "Version": "2.23-17",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "9e703ad8bf0e99f3691f05da32dfe68b"
+      "Hash": "bbff70c8c0357b5b88238c83f680fcd3"
     },
     "MASS": {
       "Package": "MASS",
@@ -509,15 +509,10 @@
     },
     "rmarkdown": {
       "Package": "rmarkdown",
-      "Version": "2.6.6",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteUsername": "rstudio",
-      "RemoteRepo": "rmarkdown",
-      "RemoteRef": "master",
-      "RemoteSha": "5c3e3f5999d0e9fbf31892c4c649bdbf46936062",
-      "RemoteHost": "api.github.com",
-      "Hash": "cc0b5c315f1711d403d401b8480aab7e"
+      "Version": "2.6",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "bc4bac38960b446c183957bfd563e763"
     },
     "rprojroot": {
       "Package": "rprojroot",
