@@ -105,14 +105,14 @@ ufp_batch_read <- function(paths, event_threshold = 10, tz = "America/New_York",
         l_event
       } else if (abs(tdiff) > time_correction) {
         message(crayon::red(paste0('Sampling Event ', l_event$Sampling_Event[1], ': The median time difference (',
-                                   round(tdiff, digits = 1), ' mins) between the GPS signal and the PUFP reading was greater than the correction threshold (',
+                                   round(tdiff, digits = 1), ' mins) between the GPS signal and the PUFP reading was greater than \n the correction threshold (',
                                    time_correction, ' mins). `Date_Time` has been corrected.')))
         l_event$Date_Time <- l_event$Date_Time - tdiff
 
         l_event
       } else if (abs(tdiff) < time_correction) {
         message(crayon::green(paste0('Sampling Event ', l_event$Sampling_Event[1], ': The median time difference (',
-                                     round(tdiff, digits = 1), ' mins) between the GPS signal and the PUFP reading was less than the correction threshold (',
+                                     round(tdiff, digits = 1), ' mins) between the GPS signal and the PUFP reading was less than \n the correction threshold (',
                                      time_correction, ' mins). `Date_Time` was not corrected.')))
         l_event
       }

@@ -67,7 +67,7 @@ ufp_read <- function(path, tz = "America/New_York", truncate_ufp = TRUE, coords 
     
     if (med_diff > time_correction) {
       message(crayon::green(paste0('The mean time difference (',
-                                   round(med_diff, digits = 1), ' mins) between the GPS signal and the PUFP reading was greater than the correction threshold (',
+                                   round(med_diff, digits = 1), ' mins) between the GPS signal and the PUFP reading was greater than \n the correction threshold (',
                                    time_correction, ' mins). `Date_Time` has been corrected.')))
       pufp_df$Date_Time <- pufp_df$Date_Time - med_diff
     }
