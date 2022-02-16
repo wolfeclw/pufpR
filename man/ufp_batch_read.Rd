@@ -13,7 +13,8 @@ ufp_batch_read(
   ufp_check = FALSE,
   participant_id = NULL,
   sample_col = NULL,
-  sample_id = NULL
+  sample_id = NULL,
+  time_correction = NULL
 )
 }
 \arguments{
