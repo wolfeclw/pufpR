@@ -24,7 +24,8 @@ Imports:
     stringr,
     tibble,
     tidyr,
-    zoo
+    zoo, 
+    crayon
 Suggests: 
     testthat
 Encoding: UTF-8

@@ -46,6 +46,9 @@ column to denote sample ID. Default is NULL.}
 
 \item{sample_id}{user defined string to denote sample ID. If assigned, a
 value must also be supplied to \code{sample_col}. Default is NULL.}
+
+\item{time_correction}{numeric; second threshold to correct \code{Date_Time} using GPS
+recorded time.}
 }
 \value{
 a tibble. Additional columns are created for 'Sampling_Event' and
