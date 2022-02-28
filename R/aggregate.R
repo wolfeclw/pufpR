@@ -24,6 +24,7 @@
 #' }
 #' @importFrom stats median 
 #' @importFrom purrr map map_chr map_lgl
+#' 
 ufp_aggregate <- function(df, unit = "5 seconds", floor_or_celiling = "floor",
                           summary_fun = "median") {
   if (sum(stringr::str_detect(names(df), "Date_Time")) == 0) {
